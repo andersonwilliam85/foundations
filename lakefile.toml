@@ -1,0 +1,23 @@
+name = "foundation"
+version = "0.1.0"
+defaultTargets = ["Hodge", "Poincare", "NavierStokes", "Bsd"]
+
+[[lean_lib]]
+name = "Hodge"
+srcDir = "."
+roots = ["hodge.Proof", "hodge.Examples"]
+
+[[lean_lib]]
+name = "Poincare"
+srcDir = "."
+roots = ["poincare.Proof", "poincare.Examples"]
+
+[[lean_lib]]
+name = "NavierStokes"
+srcDir = "."
+roots = ["navierstokes.Proof", "navierstokes.Examples"]
+
+[[lean_lib]]
+name = "Bsd"
+srcDir = "."
+roots = ["bsd.Proof", "bsd.Examples"]
