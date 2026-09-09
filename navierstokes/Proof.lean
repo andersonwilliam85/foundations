@@ -311,6 +311,32 @@ theorem leftover_officialB (sol : OfficialNS) {T : Time} (hT : 0 < T)
   ⟨hp, hu, ⟨T, leftover_isLeftover sol hT⟩,
     leftover_officialSmooth_of_smooth sol hT hs⟩
 
+/-- Their open initial datum: Schwartz, divergence-free. -/
+def AdmissibleOpen (u0 : Place → Place) : Prop :=
+  SpatialSchwartz u0 ∧ ∀ x, divergence u0 x = 0
+
+/-- Their periodic initial datum: lattice-periodic, divergence-free. -/
+def AdmissiblePeriodic (u0 : Place → Place) : Prop :=
+  SpatialPeriodic u0 ∧ ∀ x, divergence u0 x = 0
+
+theorem sit_u0_admissible_open (sol : OfficialNS) (ho : sol.Open)
+    (hs : sol.Satisfies) : AdmissibleOpen sol.u0 := by
+  have h0 : (0 : Time) ∈ sol.lifespan := hs.2.1
+  refine ⟨?_, fun x => hs.2.2.1 0 h0 x⟩
+  have hsc := hs.2.2.2.1
+  have hdom : sol.domain = Domain.open := ho
+  simp [OfficialNS.SpatialCondition, hdom] at hsc
+  exact (hsc 0 h0).1
+
+theorem sit_u0_admissible_periodic (sol : OfficialNS) (hp : sol.Periodic)
+    (hs : sol.Satisfies) : AdmissiblePeriodic sol.u0 := by
+  have h0 : (0 : Time) ∈ sol.lifespan := hs.2.1
+  refine ⟨?_, fun x => hs.2.2.1 0 h0 x⟩
+  have hsc := hs.2.2.2.1
+  have hdom : sol.domain = Domain.periodic := hp
+  simp [OfficialNS.SpatialCondition, hdom] at hsc
+  exact (hsc 0 h0).1
+
 /--
   Official (A) datum: unforced open initial datum, seated.
   OfficialNS produces leftover from it: leftover T := cl.
@@ -339,6 +365,10 @@ theorem AdmissibleOpenUnforced.leftover_from_datum
     (α.leftover T).u0 = α.u0 :=
   leftover_u0 α.sit T
 
+theorem AdmissibleOpenUnforced.u0_admissible (α : AdmissibleOpenUnforced) :
+    AdmissibleOpen α.u0 :=
+  sit_u0_admissible_open α.sit α.is_open α.smooth.1
+
 /--
   Official (B) datum: unforced periodic initial datum, seated.
   Leftover produced from it. leftover T := cl.
@@ -366,6 +396,10 @@ theorem AdmissiblePeriodicUnforced.leftover_from_datum
     (α : AdmissiblePeriodicUnforced) (T : Time) :
     (α.leftover T).u0 = α.u0 :=
   leftover_u0 α.sit T
+
+theorem AdmissiblePeriodicUnforced.u0_admissible
+    (α : AdmissiblePeriodicUnforced) : AdmissiblePeriodic α.u0 :=
+  sit_u0_admissible_periodic α.sit α.is_periodic α.smooth.1
 
 /-- Their (C)(D) force: C^∞ in spacetime, and Fefferman decay on sitting times. -/
 def OfficialNS.SpacetimeSmoothForce (sol : OfficialNS) : Prop :=

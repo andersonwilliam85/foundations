@@ -32,6 +32,12 @@ example : (restOpen.leftover 1).u0 = restOpen.u0 :=
 example : (restOpenDatum.leftover 1).u0 = restOpenDatum.u0 :=
   restOpenDatum.leftover_from_datum 1
 
+example : AdmissibleOpen restOpenDatum.u0 :=
+  restOpenDatum.u0_admissible
+
+example : AdmissiblePeriodic restPeriodicDatum.u0 :=
+  restPeriodicDatum.u0_admissible
+
 /-- Prize B. Leftover from each admissible unforced periodic datum. -/
 example : clayB :=
   fefferman_B
