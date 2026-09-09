@@ -2,7 +2,7 @@ import hodge.Proof
 
 /-
   Shape seating plus leftover / cl / inverse.
-  ProjectiveNonsingularVariety is Ground + Embedding + seatedR.
+  ProjectiveNonsingularVariety is Ground + Embedding + Regularity.
   Leftover is computed. AlgebraicCycle is Cut.
   FromMathlib is furniture. OfficialHodge sits on Proof.
   `#eval run` is Bool.

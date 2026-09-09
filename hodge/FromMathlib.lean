@@ -204,7 +204,7 @@ example (X : Scheme.{u}) (Z : AlgebraicCycle X ℚ) (n : ℤ) :
 /-
   Furniture stays. The prize is leftover / cl / inverse in hodge.Proof.
   HodgeClass and cl sit there as leftover and lookup. Slot (p,p) is leftover.slot.
-  ProjectiveNonsingularVariety is Ground + Embedding + seatedR there.
+  ProjectiveNonsingularVariety is Ground + Embedding + Regularity there.
   Leftover is computed. AlgebraicCycle is Cut there.
   mathlib AlgebraicCycle X ℚ is furniture, not that Cut.
   H^{p,p} is not a type here. Cycle class of a variety is not a type here.
