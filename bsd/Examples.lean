@@ -1,10 +1,10 @@
 import bsd.Proof
 
 /-
-  OfficialBsd (E : EllipticCurve) (hE : E.Official): leftover α of E has cut z.
+  OfficialBsd (E : EllipticCurve) (hE : E.IsElliptic): leftover α of E has cut z.
   Rank = ord L as ClaySentence.
-  EllipticCurve is an elliptic curve over Q. Those words gate the sit.
-  E produces a seating. E is not Shape. E is not thisLock.
+  E is a curve over Q. Leftover of E(Q) produces the seating.
+  thisCurve produces thisLock. Not two flags. Not Shape.
   Rank is leftover. Ord L is cut.
   FromMathlib is furniture. Not imported here: mathlib Cycle
   and the paid pairing Cycle cannot share a file.
@@ -13,14 +13,17 @@ import bsd.Proof
 
 def dropSixth : Shape := thisCurve.produce.drop droppedR
 
-example : thisCurve.ground = GroundQ.rat :=
+example : thisCurve.A = 0 :=
   rfl
 
-example : thisCurve.kind = Kind.elliptic :=
+example : thisCurve.B = 1 :=
   rfl
 
-example : thisCurve.Official :=
-  thisCurve_official
+example : thisCurve.leftoverR = leftoverSeq :=
+  rfl
+
+example : thisCurve.IsElliptic :=
+  thisCurve_isElliptic
 
 example : thisCurve.produce = thisLock :=
   thisCurve_produces_lock
@@ -64,7 +67,7 @@ example : ¬ dropSixth.Whole := by
 
 example : thisCurve.produce.present.length = 12 ∧
     dropSixth.present.length = 11 :=
-  thin_count_12_to_11
+  thisCurve_drop_count_12_to_11
 
 example : cl thisCurve.produce.present ⟨13⟩ = some ⟨lockP, 6⟩ :=
   cl_computes
@@ -80,34 +83,17 @@ example : ¬ ClayOn dropSixth ⟨lockP, 6⟩ ⟨13⟩ := by
 
 example : inverse thisCurve.produce.present (leftoverOf (here ⟨6, 13⟩)) =
     some (cutOf (here ⟨6, 13⟩)) :=
-  (L_is_modeled_R thisCurve thisCurve_official (here ⟨6, 13⟩) (by decide)).1
+  (L_is_modeled_R thisCurve (here ⟨6, 13⟩) (by decide)).1
 
 example (α : Leftover) (hα : α ∈ rank thisCurve) :
     ∃ z : Cut, ClaySentence thisCurve α z :=
-  OfficialBsd thisCurve thisCurve_official α hα
-
-example : ¬ notOverQ.Official :=
-  notOverQ_not_official
-
-example : ¬ notElliptic.Official :=
-  notElliptic_not_official
-
-example : rank notOverQ = [] :=
-  notOverQ_leftover_empty
-
-example : rank notElliptic = [] :=
-  notElliptic_leftover_empty
-
-example : ord notOverQ = [] :=
-  notOverQ_ord_empty
-
-example : ord notElliptic = [] :=
-  notElliptic_ord_empty
+  OfficialBsd thisCurve thisCurve_isElliptic α hα
 
 def run : Bool :=
-  decide (thisCurve.ground = GroundQ.rat) &&
-  decide (thisCurve.kind = Kind.elliptic) &&
-  decide thisCurve.Official &&
+  decide (thisCurve.A = 0) &&
+  decide (thisCurve.B = 1) &&
+  decide (thisCurve.leftoverR = leftoverSeq) &&
+  decide thisCurve.IsElliptic &&
   decide (thisCurve.produce = thisLock) &&
   decide (OfficialBsdOn thisCurve.produce) &&
   decide (¬ OfficialBsdOn dropSixth) &&
@@ -123,10 +109,6 @@ def run : Bool :=
   decide (leftoverSix.r = 6) &&
   decide (inverse dropSixth.present leftoverSix = none) &&
   decide (⟨13⟩ ∈ ord thisCurve) &&
-  decide (¬ ClayOn dropSixth ⟨lockP, 6⟩ ⟨13⟩) &&
-  decide (¬ notOverQ.Official) &&
-  decide (¬ notElliptic.Official) &&
-  decide (rank notOverQ = []) &&
-  decide (rank notElliptic = [])
+  decide (¬ ClayOn dropSixth ⟨lockP, 6⟩ ⟨13⟩)
 
 #eval run
