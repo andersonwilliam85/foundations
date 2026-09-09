@@ -10,7 +10,7 @@ Navier–Stokes and Birch and Swinnerton-Dyer sit with Hodge and Poincaré. Each
 
 This house is foundations. The book lives here: *Foundations: Why Structure Is Everything*. A preview of the cover and the first three minted chapters sits under writing/books/.
 
-Four proofs sit with the book. Hodge: a hole is a missing relationship, a cycle the shape still owes. The shape is whole if and only if every belonging cycle is present. Poincaré, revised: a complete meeting is the sphere, not the world. Ricci is Perelman's path. \(S^3\) is not the world. Navier–Stokes: a flow is a lock and its instants; blow-up is a hole. Birch and Swinnerton-Dyer: rank and order are two names for one belonging. Each one has a chapter, a written proof, and Lean 4. `lake build` is the check.
+Four proofs sit with the book. Hodge: a hole is a missing relationship, a cycle the shape still owes. The shape is whole if and only if every belonging cycle is present. Poincaré, revised: a complete meeting is the sphere, not the world. Ricci is Perelman's path. $S^3$ is not the world. Navier–Stokes: a flow is a lock and its instants; blow-up is a hole. Birch and Swinnerton-Dyer: rank and order are two names for one belonging. Each one has a chapter, a written proof, and Lean 4. `lake build` is the check.
 
 ABOUT is a slice of the life. The dedications are there.
 

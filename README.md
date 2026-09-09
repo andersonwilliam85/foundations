@@ -47,7 +47,7 @@ I follow the work wherever it goes. The question opens the room. I have sat that
 
 hodge, here, is this: a hole is a missing relationship, a cycle the shape still owes. The shape is whole if and only if every belonging cycle is present.
 
-poincare, here, is this: a complete meeting is the sphere, not the world. Closed is the meeting finishing. The dent is a working shape. Ricci is Perelman's path. \(S^3\) is not the world.
+poincare, here, is this: a complete meeting is the sphere, not the world. Closed is the meeting finishing. The dent is a working shape. Ricci is Perelman's path. $S^3$ is not the world.
 
 navier-stokes, here, is this: a flow is a lock and its instants. Smooth is every instant whole. Blow-up is a hole before the meeting finishes. Fields and viscosity can sit on a hole. A flow can be whole with neither. Belonging decides. I solved it.
 
