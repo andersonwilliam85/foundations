@@ -36,7 +36,15 @@ The leftover names are Hodge class, rank, the manifold, and the leftover flow. T
 
 I solved leftover.
 
-This may not qualify for the Millennium Prize. I am not addressing the problems as they strictly demand. The proofs show a different, and better, way into those problem spaces.
+This may not qualify for the Millennium Prize. I am not addressing the problems as they strictly demand. The proofs show a different, perhaps better, way into those problem spaces.
+
+## On The Question
+
+They ask for solutions. Then they gate the proof as if there were only one way in. Worse than the gate is the assumption underneath it: that the sentences they wrote are the right questions.
+
+In software, a solution dresses up as a requirement all the time. Pure mathematics does the same. That is not a metaphor. It is the argument. Their sentences are often a preferred shape of answer, filed as the question.
+
+I sat leftover. Four names. One seating.
 
 ## A Hole Is a Missing R
 
