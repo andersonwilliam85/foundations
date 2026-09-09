@@ -2,7 +2,8 @@ import hodge.Proof
 
 /-
   Shape seating plus leftover / cl / inverse.
-  ProjectiveNonsingularVariety produces a seating. AlgebraicCycle is Cut.
+  ProjectiveNonsingularVariety is Ground + Embedding + seatedR.
+  Leftover is computed. AlgebraicCycle is Cut.
   FromMathlib is furniture. OfficialHodge sits on Proof.
   `#eval run` is Bool.
 -/
@@ -82,11 +83,14 @@ example : leftoverSix.slot = (leftoverSix.p, leftoverSix.p) :=
 example : leftoverSix.slot = (lockP, lockP) :=
   rfl
 
-example : thisVariety.produces = thisLock :=
+example : thisVariety.Official :=
+  thisVariety_official
+
+example : thisVariety.seating = thisLock :=
   thisVariety_produces_lock
 
-example : thisVariety.leftover = thisLock.belong.map leftoverOf :=
-  rfl
+example : thisVariety.leftover = thisLock.belong.map leftoverOf := by
+  simp [ProjectiveNonsingularVariety.leftover, thisVariety_produces_lock]
 
 example : algebraicCycleOf thisVariety = Cut :=
   algebraicCycleOf_is_cut thisVariety
@@ -95,10 +99,10 @@ example : AlgebraicCycle = Cut :=
   algebraicCycle_is_cut
 
 example (α : HodgeClass) (hα : α ∈ thisVariety.leftover) :
-    isSpanOfCl α thisVariety.produces.present :=
-  OfficialHodge thisVariety α hα
+    isSpanOfCl α thisVariety.seating.present :=
+  OfficialHodge thisVariety thisVariety_official α hα
 
-example : OfficialHodgeOn thisVariety.produces :=
+example : OfficialHodgeOn thisVariety.seating :=
   OfficialHodgeOn_thisVariety
 
 example : OfficialHodgeOn thisLock :=
@@ -107,7 +111,7 @@ example : OfficialHodgeOn thisLock :=
 example : ¬ OfficialHodgeOn dropSixth :=
   not_OfficialHodgeOn_drop
 
-example : ¬ OfficialHodgeOn (thisVariety.produces.drop sixth) :=
+example : ¬ OfficialHodgeOn (thisVariety.seating.drop sixth) :=
   not_OfficialHodgeOn_drop
 
 example : leftoverSix ∈ dropSixth.belong.map leftoverOf ∧
@@ -116,6 +120,19 @@ example : leftoverSix ∈ dropSixth.belong.map leftoverOf ∧
 
 example : dropSixth.present.length = 11 :=
   drop_count_12_to_11.2
+
+example : ¬ notOverC.Official ∧ notOverC.leftover = [] :=
+  ⟨notOverC_not_official, notOverC_leftover_empty⟩
+
+example : ¬ affineX.Official ∧ affineX.leftover = [] :=
+  ⟨affineX_not_official, affineX_leftover_empty⟩
+
+example : ¬ pointX.Official ∧ pointX.leftover = [] :=
+  ⟨pointX_not_official, pointX_leftover_empty⟩
+
+example : ¬ singularX.Official ∧ ¬ OfficialHodgeOn singularX.seating ∧
+    singularX.seating.Hole droppedR :=
+  ⟨singularX_not_official, not_OfficialHodgeOn_singular, singular_is_missing_R⟩
 
 def run : Bool :=
   decide thisLock.Whole &&
@@ -127,12 +144,21 @@ def run : Bool :=
   decide dressedHoled.shape.HasHole &&
   decide dressedWhole.shape.Whole &&
   decide (leftoverSix.slot = (lockP, lockP)) &&
-  decide (OfficialHodgeOn thisVariety.produces) &&
+  decide thisVariety.Official &&
+  decide (thisVariety.seating = thisLock) &&
+  decide (OfficialHodgeOn thisVariety.seating) &&
   decide (OfficialHodgeOn thisLock) &&
   decide (¬ OfficialHodgeOn dropSixth) &&
-  decide (¬ OfficialHodgeOn (thisVariety.produces.drop sixth)) &&
+  decide (¬ OfficialHodgeOn (thisVariety.seating.drop sixth)) &&
   decide (¬ isSpanOfCl leftoverSix dropSixth.present) &&
   decide (thisLock.present.length = 12) &&
-  decide (dropSixth.present.length = 11)
+  decide (dropSixth.present.length = 11) &&
+  decide (¬ notOverC.Official) &&
+  decide (notOverC.leftover = []) &&
+  decide (¬ affineX.Official) &&
+  decide (¬ pointX.Official) &&
+  decide (¬ singularX.Official) &&
+  decide (¬ OfficialHodgeOn singularX.seating) &&
+  decide (singularX.seating.Hole droppedR)
 
 #eval run
