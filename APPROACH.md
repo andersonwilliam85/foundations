@@ -36,6 +36,8 @@ The leftover names are Hodge class, rank, the manifold, and the leftover flow. T
 
 I solved leftover.
 
+This may not qualify for the Millennium Prize. I am not addressing the problems as they strictly demand. The proofs show a different, and better, way into those problem spaces.
+
 ## A Hole Is a Missing R
 
 Drop one pair. Twelve sittings become eleven. The leftover is still owed. There is no partner. That hole is a missing $R$.
