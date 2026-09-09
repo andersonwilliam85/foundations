@@ -208,7 +208,7 @@ example (X : Scheme.{u}) (Z : AlgebraicCycle X ℚ) (n : ℤ) :
   Leftover is produced from X. AlgebraicCycle is Cut there.
   mathlib AlgebraicCycle X ℚ is furniture, not that Cut.
   H^{p,p} is not a type here. Cycle class of a variety is not a type here.
-  Unique F is the filtration furniture already sitting. Do not remint.
+  Filtration furniture already sitting.
 
   Homology is total H_dR^n with one ℕ degree.
   deRhamHodgeFiltration p sits as σ≥p on the complex.

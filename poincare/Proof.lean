@@ -4,13 +4,13 @@
   Cut is the other world (Sphere3 side).
   cl / inverse: the pairing projects and reconstructs.
   Official M carries loops and cuts. Type of M is not Shape, not Leftover.
-  Leftover and seating are produced via unique F lookup. No remint.
+  Leftover and seating are produced.
   Compact / simply-connected / dimension 3 are topology on leftover:
   every loop leftover has a cut; hole = missing R.
   thisLock is what one M produces. Not what every such M is.
   Identity on Sphere3 computes. It is not the ∀-prize witness.
   Cite HYP-117 / INT-167 (hole = missing R), HYP-112 (project to act).
-  Unique F paid. Do not pick. Same math as Hodge leftover / cl / inverse / drop.
+  Same math as Hodge leftover / cl / inverse / drop.
   Furniture from mathlib lives in `poincare.FromMathlib`. Cite names. Do not inhabit.
   No Ricci. No sorry.
 -/
@@ -146,7 +146,7 @@ instance (s : Shape) : Decidable s.HasHole :=
 instance (s : Shape) (c : Placed) : Decidable (s.Hole c) :=
   inferInstanceAs (Decidable (c ∈ s.belong ∧ c ∉ s.present))
 
-/-- Two generated sequences. Pair them. That is the seating. Unique F. -/
+/-- Two generated sequences. Pair them. That is the seating. -/
 def leftoverSeq : List Nat := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 def cutSeq : List Nat := [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
@@ -266,7 +266,7 @@ theorem thisLock_seated_eq_lock :
     thisLock.seated = lockPairings := by
   decide
 
-/-- Unique F lookup. Leftover does not store the cut. -/
+/-- Leftover does not store the cut. -/
 def pairingOf (α : Leftover) : Option Placed :=
   lockPairings.find? (fun p => leftoverOf p == α)
 
@@ -313,7 +313,7 @@ structure CompactSimplyConnected3Manifold where
 
 abbrev PoincareClass := CompactSimplyConnected3Manifold
 
-/-- Pairings leftover worlds look up on unique F. -/
+/-- Pairings leftover worlds look up. -/
 def CompactSimplyConnected3Manifold.pairs
     (M : CompactSimplyConnected3Manifold) : List Placed :=
   M.loops.filterMap pairingOf

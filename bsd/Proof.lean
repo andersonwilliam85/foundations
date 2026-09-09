@@ -4,14 +4,13 @@ import hodge.Proof
   Birch and Swinnerton-Dyer. Wiles, for Clay 5(a)/5(d):
   rank E(Q) = ord_{s=1} L(E,s) for an elliptic curve over Q.
   E is a curve over Q. Not two flags. Not Shape. Not Hodge's lock.
-  Leftover of E(Q) is leftover of that curve. Produce pairs it with
-  the unique paid F. That seating is L. Rank reads leftover.
+  Leftover of E(Q) is leftover of that curve. Produce pairs it.
+  That seating is L. Rank reads leftover.
   Ord L reads cut. Do not emit lockPairings from official words.
   thisLock may be what one E produces.
   L is modeled R. A hole is a missing R. No stored order field.
   cl projects. inverse reconstructs.
   Paid seating: hodge.Proof (Cycle, Shape, Leftover, Cut, cl, inverse).
-  Unique F paid. Do not remint F.
   Do not wait on AddGroup.FG or AnalyticAt / abscissa < 1.
 
   Furniture present, not the prize (bsd.FromMathlib):
@@ -77,7 +76,7 @@ instance (E : EllipticCurve) : Decidable E.IsElliptic :=
 
 /--
   Paid pairings whose leftover the curve sits.
-  Unique F. Not reminted. Not `if elliptic then lockPairings`.
+  Not `if elliptic then lockPairings`.
 -/
 def paidFor (rs : List Nat) : List Placed :=
   lockPairings.filter fun p => decide (p.cycle.left ∈ rs)
