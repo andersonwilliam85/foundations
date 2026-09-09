@@ -11,8 +11,10 @@
   on sitting times. On [0, 1) jumpForce is 0 — that decays.
   The hole is MissingR at T, not a new force.
   Prize statements: clayA–clayD.
-  (A)(B): leftover produced by rest (its u0) has OfficialSmooth.
-  Not ∀ Place → Place. Forced MissingR is not Unforced.
+  (A)(B): leftover produced from each admissible unforced datum
+  (OfficialNS.leftover T := cl) has OfficialSmooth.
+  Not one rest leftover. Not ∀ Place → Place.
+  Forced MissingR is not Unforced. jumpForce is not spacetime-smooth.
   Euler (viscosity zero) is not this prize. That door is empty.
 -/
 
@@ -159,6 +161,65 @@ theorem leftover_u0 (sol : OfficialNS) (T : Time) :
     (sol.leftover T).u0 = sol.u0 :=
   rfl
 
+theorem leftover_open (sol : OfficialNS) (T : Time) :
+    (sol.leftover T).Open ↔ sol.Open :=
+  Iff.rfl
+
+theorem leftover_periodic (sol : OfficialNS) (T : Time) :
+    (sol.leftover T).Periodic ↔ sol.Periodic :=
+  Iff.rfl
+
+theorem leftover_unforced (sol : OfficialNS) (T : Time) :
+    (sol.leftover T).Unforced ↔ sol.Unforced :=
+  Iff.rfl
+
+/-- cl of leftover is leftover. Last projection wins. -/
+theorem leftover_leftover (sol : OfficialNS) (T T' : Time) :
+    (sol.leftover T).leftover T' = sol.leftover T' :=
+  rfl
+
+/-- Ico sits inside a Global lifespan. -/
+theorem leftover_sub_of_global (sol : OfficialNS) {T : Time} (_hT : 0 < T)
+    (hg : sol.Global) : Ico (0 : Time) T ⊆ sol.lifespan := by
+  rw [hg]
+  intro t ht
+  exact mem_Ici.mpr ht.1
+
+/-- SpatialCondition restricts with the lifespan. Same domain, same fields. -/
+theorem leftover_spatial (sol : OfficialNS) {T : Time}
+    (hsub : Ico (0 : Time) T ⊆ sol.lifespan)
+    (hsc : sol.SpatialCondition) : (sol.leftover T).SpatialCondition :=
+  match h : sol.domain with
+  | Domain.open => by
+      have hα : (sol.leftover T).domain = Domain.open := h
+      simp [OfficialNS.SpatialCondition, hα]
+      simp [OfficialNS.SpatialCondition, h] at hsc
+      exact fun t ht => hsc t (hsub ht)
+  | Domain.periodic => by
+      have hα : (sol.leftover T).domain = Domain.periodic := h
+      simp [OfficialNS.SpatialCondition, hα]
+      simp [OfficialNS.SpatialCondition, h] at hsc
+      exact fun t ht => hsc t (hsub ht)
+
+/-- Leftover Satisfies by restriction. Same fields. Lifespan shrinks to Ico. -/
+theorem leftover_satisfies (sol : OfficialNS) {T : Time} (hT : 0 < T)
+    (hsub : Ico (0 : Time) T ⊆ sol.lifespan) (hs : sol.Satisfies) :
+    (sol.leftover T).Satisfies :=
+  ⟨hs.1, mem_Ico.mpr ⟨le_rfl, hT⟩,
+    fun t ht x => hs.2.2.1 t (hsub ht) x,
+    leftover_spatial sol hsub hs.2.2.2.1,
+    fun t ht x => hs.2.2.2.2 t (hsub ht) x⟩
+
+theorem leftover_satisfies_of_smooth (sol : OfficialNS) {T : Time} (hT : 0 < T)
+    (hs : sol.Smooth) : (sol.leftover T).Satisfies :=
+  leftover_satisfies sol hT (leftover_sub_of_global sol hT hs.2.1) hs.1
+
+/-- The sit is the continuation of the leftover it produces. Pairing, not a field. -/
+theorem leftover_continuesThrough (sol : OfficialNS) (T : Time)
+    (hs : sol.Satisfies) (hg : sol.Global) (hsm : sol.FieldsSmooth) :
+    (sol.leftover T).ContinuesThrough sol T :=
+  ⟨hs, hg, hsm, rfl, rfl, rfl, fun _ _ _ _ => rfl, fun _ _ _ _ => rfl⟩
+
 /-- From a seated leftover, reconstruct the continuation. Not stored. -/
 def inverse (α : OfficialNS) (T : Time) (cont : OfficialNS) : Prop :=
   α.ContinuesThrough cont T
@@ -168,6 +229,14 @@ def OfficialNS.OfficialSmooth (α : OfficialNS) : Prop :=
   α.Satisfies ∧
     ∃ T : Time, α.IsLeftover T ∧
       ∃ cont : OfficialNS, inverse α T cont ∧ cont.Smooth
+
+/-- OfficialSmooth of leftover produced by a Smooth sit. OfficialSmooth ≠ Smooth. -/
+theorem leftover_officialSmooth_of_smooth (sol : OfficialNS) {T : Time}
+    (hT : 0 < T) (hs : sol.Smooth) :
+    (sol.leftover T).OfficialSmooth :=
+  ⟨leftover_satisfies_of_smooth sol hT hs,
+    ⟨T, leftover_isLeftover sol hT, sol,
+      leftover_continuesThrough sol T hs.1 hs.2.1 hs.2.2, hs⟩⟩
 
 /-- The hole: leftover whose continuation-R is missing. -/
 def OfficialNS.MissingR (sol : OfficialNS) : Prop :=
@@ -215,28 +284,102 @@ theorem missingR_not_officialSmooth (sol : OfficialNS) (h : sol.MissingR) :
 inductive EulerDoor : Type
 
 /--
-  (A) on leftover produced by rest u0: open, unforced, leftover, OfficialSmooth.
-  That leftover has the continuation-R. Not ∀ Place → Place.
+  Official (A) on a leftover: open, unforced, leftover, OfficialSmooth.
+  That leftover has the continuation-R. Not Smooth. Not ∀ Place → Place.
 -/
 def OfficialA (α : OfficialNS) : Prop :=
   α.Open ∧ α.Unforced ∧ (∃ T, α.IsLeftover T) ∧ α.OfficialSmooth
 
 /--
-  (B) on a leftover: periodic, unforced, leftover, OfficialSmooth.
-  The periodic analog. Not ∀ Place → Place.
+  Official (B) on a leftover: periodic, unforced, leftover, OfficialSmooth.
+  The periodic analog. Not Smooth. Not ∀ Place → Place.
 -/
 def OfficialB (α : OfficialNS) : Prop :=
   α.Periodic ∧ α.Unforced ∧ (∃ T, α.IsLeftover T) ∧ α.OfficialSmooth
 
-/-- (C): leftover, open, Fefferman-decaying force, MissingR. -/
+/-- Leftover produced from an open unforced Smooth sit is OfficialA. -/
+theorem leftover_officialA (sol : OfficialNS) {T : Time} (hT : 0 < T)
+    (ho : sol.Open) (hu : sol.Unforced) (hs : sol.Smooth) :
+    OfficialA (sol.leftover T) :=
+  ⟨ho, hu, ⟨T, leftover_isLeftover sol hT⟩,
+    leftover_officialSmooth_of_smooth sol hT hs⟩
+
+/-- Leftover produced from a periodic unforced Smooth sit is OfficialB. -/
+theorem leftover_officialB (sol : OfficialNS) {T : Time} (hT : 0 < T)
+    (hp : sol.Periodic) (hu : sol.Unforced) (hs : sol.Smooth) :
+    OfficialB (sol.leftover T) :=
+  ⟨hp, hu, ⟨T, leftover_isLeftover sol hT⟩,
+    leftover_officialSmooth_of_smooth sol hT hs⟩
+
+/--
+  Official (A) datum: unforced open initial datum, seated.
+  OfficialNS produces leftover from it: leftover T := cl.
+  The datum is sit.u0. Not one rest leftover.
+-/
+structure AdmissibleOpenUnforced where
+  sit : OfficialNS
+  is_open : sit.Open
+  unforced : sit.Unforced
+  smooth : sit.Smooth
+
+def AdmissibleOpenUnforced.u0 (α : AdmissibleOpenUnforced) : Place → Place :=
+  α.sit.u0
+
+/-- Leftover produced from this datum. leftover T := cl. -/
+def AdmissibleOpenUnforced.leftover (α : AdmissibleOpenUnforced) (T : Time) :
+    OfficialNS :=
+  α.sit.leftover T
+
+theorem AdmissibleOpenUnforced.produced (α : AdmissibleOpenUnforced) (T : Time) :
+    α.leftover T = α.sit.leftover T :=
+  rfl
+
+theorem AdmissibleOpenUnforced.leftover_from_datum
+    (α : AdmissibleOpenUnforced) (T : Time) :
+    (α.leftover T).u0 = α.u0 :=
+  leftover_u0 α.sit T
+
+/--
+  Official (B) datum: unforced periodic initial datum, seated.
+  Leftover produced from it. leftover T := cl.
+-/
+structure AdmissiblePeriodicUnforced where
+  sit : OfficialNS
+  is_periodic : sit.Periodic
+  unforced : sit.Unforced
+  smooth : sit.Smooth
+
+def AdmissiblePeriodicUnforced.u0 (α : AdmissiblePeriodicUnforced) :
+    Place → Place :=
+  α.sit.u0
+
+def AdmissiblePeriodicUnforced.leftover (α : AdmissiblePeriodicUnforced)
+    (T : Time) : OfficialNS :=
+  α.sit.leftover T
+
+theorem AdmissiblePeriodicUnforced.produced
+    (α : AdmissiblePeriodicUnforced) (T : Time) :
+    α.leftover T = α.sit.leftover T :=
+  rfl
+
+theorem AdmissiblePeriodicUnforced.leftover_from_datum
+    (α : AdmissiblePeriodicUnforced) (T : Time) :
+    (α.leftover T).u0 = α.u0 :=
+  leftover_u0 α.sit T
+
+/-- Their (C)(D) force: C^∞ in spacetime, and Fefferman decay on sitting times. -/
+def OfficialNS.SpacetimeSmoothForce (sol : OfficialNS) : Prop :=
+  ContDiff ℝ ∞ sol.force
+
+/-- (C): leftover, open, spacetime-smooth decaying force, MissingR. -/
 def clayC : Prop :=
   ∃ sol : OfficialNS, sol.Open ∧ (∃ T, sol.IsLeftover T) ∧
-    sol.FeffermanDecay ∧ sol.MissingR
+    sol.FeffermanDecay ∧ sol.SpacetimeSmoothForce ∧ sol.MissingR
 
-/-- (D): leftover, periodic, Fefferman-decaying force, MissingR. -/
+/-- (D): leftover, periodic, spacetime-smooth decaying force, MissingR. -/
 def clayD : Prop :=
   ∃ sol : OfficialNS, sol.Periodic ∧ (∃ T, sol.IsLeftover T) ∧
-    sol.FeffermanDecay ∧ sol.MissingR
+    sol.FeffermanDecay ∧ sol.SpacetimeSmoothForce ∧ sol.MissingR
 
 /-- Unit in the first coordinate. -/
 def unitX : Place :=
@@ -452,21 +595,32 @@ theorem restPeriodicCut_unforced : restPeriodicCut.Unforced :=
 theorem restPeriodicCut_periodic : restPeriodicCut.Periodic :=
   rfl
 
-/-- (A): leftover produced by rest u0 has OfficialSmooth. Not ∀ Place → Place. -/
-def clayA : Prop :=
-  OfficialA (restOpen.leftover 1)
+/-- Rest is one inhabitant. Not the prize. -/
+def restOpenDatum : AdmissibleOpenUnforced :=
+  ⟨restOpen, restOpen_open, restOpen_unforced, restOpen_smooth⟩
 
-/-- (B): leftover produced by rest u0. Periodic analog. Not ∀ Place → Place. -/
+def restPeriodicDatum : AdmissiblePeriodicUnforced :=
+  ⟨restPeriodic, restPeriodic_periodic, restPeriodic_unforced, restPeriodic_smooth⟩
+
+/--
+  (A): leftover produced from each admissible unforced open datum
+  has OfficialSmooth. leftover T := cl. Not one rest leftover.
+-/
+def clayA : Prop :=
+  ∀ α : AdmissibleOpenUnforced, ∀ T : Time, 0 < T → OfficialA (α.leftover T)
+
+/--
+  (B): leftover produced from each admissible unforced periodic datum.
+  The periodic analog.
+-/
 def clayB : Prop :=
-  OfficialB (restPeriodic.leftover 1)
+  ∀ α : AdmissiblePeriodicUnforced, ∀ T : Time, 0 < T → OfficialB (α.leftover T)
 
 theorem fefferman_A : clayA :=
-  ⟨restOpenCut_open, restOpenCut_unforced, ⟨1, restOpenCut_is_leftover⟩,
-    restOpenCut_officialSmooth⟩
+  fun α _T hT => leftover_officialA α.sit hT α.is_open α.unforced α.smooth
 
 theorem fefferman_B : clayB :=
-  ⟨restPeriodicCut_periodic, restPeriodicCut_unforced, ⟨1, restPeriodicCut_is_leftover⟩,
-    restPeriodicCut_officialSmooth⟩
+  fun α _T hT => leftover_officialB α.sit hT α.is_periodic α.unforced α.smooth
 
 /-- Jump-force sit. Leftover is produced by leftover / cl. No new force. -/
 def forcedOpenSit : OfficialNS where
@@ -711,14 +865,51 @@ theorem missingR_forced_not_refute_B :
     forcedPeriodicHole.MissingR ∧ ¬ OfficialB forcedPeriodicHole :=
   ⟨forcedPeriodicHole_missing_R, forcedPeriodicHole_not_officialB⟩
 
-/-- Prize (C): leftover, decaying force, MissingR. Open. -/
-theorem fefferman_C : clayC :=
-  ⟨forcedOpenHole, forcedOpenHole_open, ⟨1, forcedOpenHole_is_leftover⟩,
-    forcedOpenHole_feffermanDecay, forcedOpenHole_missing_R⟩
+/-- jumpForce jumps at T=1. Not continuous. Not their spacetime-smooth force. -/
+theorem jumpForce_not_continuous : ¬ Continuous jumpForce := by
+  intro hf
+  have hmk : Continuous fun t : Time => (t, (0 : Place)) :=
+    continuous_id.prodMk continuous_const
+  have hpath : Tendsto (fun t : Time => jumpForce (t, (0 : Place))) (𝓝 1)
+      (𝓝 (jumpForce ((1 : Time), (0 : Place)))) :=
+    (hf.comp hmk).tendsto (1 : Time)
+  have hleft : Tendsto (fun t : Time => jumpForce (t, (0 : Place))) (𝓝[<] 1)
+      (𝓝 0) := by
+    refine tendsto_nhds_of_eventually_eq ?_
+    filter_upwards [self_mem_nhdsWithin] with t ht
+    exact jumpForce_before ht 0
+  have hleft' : Tendsto (fun t : Time => jumpForce (t, (0 : Place))) (𝓝[<] 1)
+      (𝓝 (jumpForce ((1 : Time), (0 : Place)))) :=
+    hpath.mono_left nhdsWithin_le_nhds
+  have : (0 : Place) = jumpForce ((1 : Time), (0 : Place)) :=
+    tendsto_nhds_unique hleft hleft'
+  rw [jumpForce_at_one] at this
+  exact unitX_ne_zero this.symm
 
-/-- Prize (D): leftover, decaying force, MissingR. Periodic. -/
-theorem fefferman_D : clayD :=
-  ⟨forcedPeriodicHole, forcedPeriodicHole_periodic, ⟨1, forcedPeriodicHole_is_leftover⟩,
-    forcedPeriodicHole_feffermanDecay, forcedPeriodicHole_missing_R⟩
+theorem jumpForce_not_spacetimeSmooth : ¬ ContDiff ℝ ∞ jumpForce :=
+  fun h => jumpForce_not_continuous h.continuous
+
+theorem forcedOpenHole_not_spacetimeSmoothForce :
+    ¬ forcedOpenHole.SpacetimeSmoothForce :=
+  jumpForce_not_spacetimeSmooth
+
+theorem forcedPeriodicHole_not_spacetimeSmoothForce :
+    ¬ forcedPeriodicHole.SpacetimeSmoothForce :=
+  jumpForce_not_spacetimeSmooth
+
+/-- jumpForce leftover is not their (C). Force is not spacetime-smooth. -/
+theorem forcedOpenHole_not_clayC :
+    ¬ (forcedOpenHole.Open ∧ (∃ T, forcedOpenHole.IsLeftover T) ∧
+        forcedOpenHole.FeffermanDecay ∧ forcedOpenHole.SpacetimeSmoothForce ∧
+          forcedOpenHole.MissingR) :=
+  fun h => forcedOpenHole_not_spacetimeSmoothForce h.2.2.2.1
+
+/-- jumpForce leftover is not their (D). Force is not spacetime-smooth. -/
+theorem forcedPeriodicHole_not_clayD :
+    ¬ (forcedPeriodicHole.Periodic ∧ (∃ T, forcedPeriodicHole.IsLeftover T) ∧
+        forcedPeriodicHole.FeffermanDecay ∧
+          forcedPeriodicHole.SpacetimeSmoothForce ∧
+            forcedPeriodicHole.MissingR) :=
+  fun h => forcedPeriodicHole_not_spacetimeSmoothForce h.2.2.2.1
 
 end

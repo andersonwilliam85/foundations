@@ -10,46 +10,56 @@ open Set
   Thin / C / D: leftover on [0, 1); continuation-R missing.
   Fefferman decay on the force: SpatialSchwartz / periodic analog
   on sitting times. On [0, 1) jumpForce is 0 — that decays.
-  (A) and (B): leftover produced by rest u0 has OfficialSmooth.
-  Not ∀ Place → Place.
-  (C) and (D) sit. Forced MissingR is not Unforced.
+  (A) and (B): leftover produced from each admissible unforced datum
+  has OfficialSmooth. leftover T := cl. Not one rest leftover.
+  jumpForce is not spacetime-smooth. Forced MissingR is not Unforced.
   Official Smooth is not Smooth. Euler door empty.
 -/
 
-/-- Prize A. Leftover produced by rest u0, OfficialSmooth. Not ∀ Place → Place. -/
+/-- Prize A. Leftover from each admissible unforced open datum. -/
 example : clayA :=
   fefferman_A
 
+example : OfficialA (restOpenDatum.leftover 1) :=
+  fefferman_A restOpenDatum 1 one_pos
+
 example : OfficialA (restOpen.leftover 1) :=
-  fefferman_A
+  leftover_officialA restOpen one_pos restOpen_open restOpen_unforced restOpen_smooth
 
 example : (restOpen.leftover 1).u0 = restOpen.u0 :=
   leftover_u0 restOpen 1
 
-/-- Prize B. Unforced leftover, periodic, OfficialSmooth. -/
+example : (restOpenDatum.leftover 1).u0 = restOpenDatum.u0 :=
+  restOpenDatum.leftover_from_datum 1
+
+/-- Prize B. Leftover from each admissible unforced periodic datum. -/
 example : clayB :=
   fefferman_B
 
+example : OfficialB (restPeriodicDatum.leftover 1) :=
+  fefferman_B restPeriodicDatum 1 one_pos
+
 example : OfficialB (restPeriodic.leftover 1) :=
-  fefferman_B
+  leftover_officialB restPeriodic one_pos restPeriodic_periodic
+    restPeriodic_unforced restPeriodic_smooth
 
-/-- Prize C. Leftover, decaying force, MissingR. Open. -/
-example : clayC :=
-  fefferman_C
-
+/-- jumpForce leftover decays on [0, 1) and has MissingR. Not their (C): force jumps. -/
 example : forcedOpenHole.Open ∧ forcedOpenHole.IsLeftover 1 ∧
     forcedOpenHole.FeffermanDecay ∧ forcedOpenHole.MissingR :=
   ⟨forcedOpenHole_open, forcedOpenHole_is_leftover,
     forcedOpenHole_feffermanDecay, forcedOpenHole_missing_R⟩
 
-/-- Prize D. Leftover, decaying force, MissingR. Periodic. -/
-example : clayD :=
-  fefferman_D
+example : ¬ forcedOpenHole.SpacetimeSmoothForce :=
+  forcedOpenHole_not_spacetimeSmoothForce
 
+/-- jumpForce leftover is not their (D). Force is not spacetime-smooth. -/
 example : forcedPeriodicHole.Periodic ∧ forcedPeriodicHole.IsLeftover 1 ∧
     forcedPeriodicHole.FeffermanDecay ∧ forcedPeriodicHole.MissingR :=
   ⟨forcedPeriodicHole_periodic, forcedPeriodicHole_is_leftover,
     forcedPeriodicHole_feffermanDecay, forcedPeriodicHole_missing_R⟩
+
+example : ¬ forcedPeriodicHole.SpacetimeSmoothForce :=
+  forcedPeriodicHole_not_spacetimeSmoothForce
 
 /-- Rest open sits and is Smooth. Not the prize. -/
 example : restOpen.Open ∧ restOpen.Unforced ∧ restOpen.Satisfies ∧ restOpen.Smooth :=
@@ -68,12 +78,20 @@ example : restPeriodic.Periodic ∧ restPeriodic.Unforced ∧ restPeriodic.Smoot
 example : ¬ restPeriodic.BlowUp :=
   restPeriodic_not_blowup
 
-/-- OfficialNS produces leftover. IsLeftover witnesses. -/
+/-- OfficialNS produces leftover. IsLeftover witnesses. leftover T := cl. -/
 example : (restOpen.leftover 1).IsLeftover 1 :=
   leftover_isLeftover restOpen one_pos
 
 example : restOpenCut = restOpen.leftover 1 :=
   restOpenCut_produced
+
+/-- cl of leftover is leftover. Last projection wins. -/
+example : (restOpen.leftover 1).leftover (1 / 2) = restOpen.leftover (1 / 2) :=
+  leftover_leftover restOpen 1 (1 / 2)
+
+/-- Leftover of any Smooth sit is OfficialSmooth. OfficialSmooth ≠ Smooth. -/
+example : (restOpen.leftover 1).OfficialSmooth :=
+  leftover_officialSmooth_of_smooth restOpen one_pos restOpen_smooth
 
 /-- Leftover is seated on [0, T). Continuation is not stored. -/
 example : restOpenCut.IsLeftover 1 :=
