@@ -11,10 +11,10 @@
   on sitting times. On [0, 1) jumpForce is 0 — that decays.
   The hole is MissingR at T, not a new force.
   Prize statements: clayA–clayD.
-  (A)(B): leftover produced from each admissible unforced datum
-  (OfficialNS.leftover T := cl) has OfficialSmooth.
-  Not one rest leftover. Not ∀ Place → Place.
-  Forced MissingR is not Unforced. jumpForce is not spacetime-smooth.
+  Official datum is u0 (AdmissibleOpen / AdmissiblePeriodic).
+  No Smooth on that type. leftover T := cl of the seated datum.
+  clayA is ∀ u0, leftover of a sit with that u0 is OfficialA.
+  Rest is one inhabitant, not that ∀. jumpForce is not spacetime-smooth.
   Euler (viscosity zero) is not this prize. That door is empty.
 -/
 
@@ -338,68 +338,74 @@ theorem sit_u0_admissible_periodic (sol : OfficialNS) (hp : sol.Periodic)
   exact (hsc 0 h0).1
 
 /--
-  Official (A) datum: unforced open initial datum, seated.
-  OfficialNS produces leftover from it: leftover T := cl.
-  The datum is sit.u0. Not one rest leftover.
+  Seated open datum. Not Smooth. OfficialNS produces leftover: leftover T := cl.
 -/
-structure AdmissibleOpenUnforced where
-  sit : OfficialNS
-  is_open : sit.Open
-  unforced : sit.Unforced
-  smooth : sit.Smooth
-
-def AdmissibleOpenUnforced.u0 (α : AdmissibleOpenUnforced) : Place → Place :=
-  α.sit.u0
-
-/-- Leftover produced from this datum. leftover T := cl. -/
-def AdmissibleOpenUnforced.leftover (α : AdmissibleOpenUnforced) (T : Time) :
-    OfficialNS :=
-  α.sit.leftover T
-
-theorem AdmissibleOpenUnforced.produced (α : AdmissibleOpenUnforced) (T : Time) :
-    α.leftover T = α.sit.leftover T :=
-  rfl
-
-theorem AdmissibleOpenUnforced.leftover_from_datum
-    (α : AdmissibleOpenUnforced) (T : Time) :
-    (α.leftover T).u0 = α.u0 :=
-  leftover_u0 α.sit T
-
-theorem AdmissibleOpenUnforced.u0_admissible (α : AdmissibleOpenUnforced) :
-    AdmissibleOpen α.u0 :=
-  sit_u0_admissible_open α.sit α.is_open α.smooth.1
+def seatedOpen (u0 : Place → Place) : OfficialNS where
+  velocity := fun p => u0 p.2
+  pressure := fun _ => 0
+  force := fun _ => 0
+  viscosity := 1
+  domain := Domain.open
+  lifespan := Ici (0 : Time)
 
 /--
-  Official (B) datum: unforced periodic initial datum, seated.
-  Leftover produced from it. leftover T := cl.
+  Seated periodic datum. Not Smooth. leftover T := cl.
 -/
-structure AdmissiblePeriodicUnforced where
-  sit : OfficialNS
-  is_periodic : sit.Periodic
-  unforced : sit.Unforced
-  smooth : sit.Smooth
+def seatedPeriodic (u0 : Place → Place) : OfficialNS where
+  velocity := fun p => u0 p.2
+  pressure := fun _ => 0
+  force := fun _ => 0
+  viscosity := 1
+  domain := Domain.periodic
+  lifespan := Ici (0 : Time)
 
-def AdmissiblePeriodicUnforced.u0 (α : AdmissiblePeriodicUnforced) :
-    Place → Place :=
-  α.sit.u0
+/-- Leftover produced from an open datum. leftover T := cl. -/
+def leftoverFromOpen (u0 : Place → Place) (T : Time) : OfficialNS :=
+  (seatedOpen u0).leftover T
 
-def AdmissiblePeriodicUnforced.leftover (α : AdmissiblePeriodicUnforced)
-    (T : Time) : OfficialNS :=
-  α.sit.leftover T
+/-- Leftover produced from a periodic datum. leftover T := cl. -/
+def leftoverFromPeriodic (u0 : Place → Place) (T : Time) : OfficialNS :=
+  (seatedPeriodic u0).leftover T
 
-theorem AdmissiblePeriodicUnforced.produced
-    (α : AdmissiblePeriodicUnforced) (T : Time) :
-    α.leftover T = α.sit.leftover T :=
+theorem leftoverFromOpen_eq_cl (u0 : Place → Place) (T : Time) :
+    leftoverFromOpen u0 T = cl (seatedOpen u0) T :=
   rfl
 
-theorem AdmissiblePeriodicUnforced.leftover_from_datum
-    (α : AdmissiblePeriodicUnforced) (T : Time) :
-    (α.leftover T).u0 = α.u0 :=
-  leftover_u0 α.sit T
+theorem leftoverFromPeriodic_eq_cl (u0 : Place → Place) (T : Time) :
+    leftoverFromPeriodic u0 T = cl (seatedPeriodic u0) T :=
+  rfl
 
-theorem AdmissiblePeriodicUnforced.u0_admissible
-    (α : AdmissiblePeriodicUnforced) : AdmissiblePeriodic α.u0 :=
-  sit_u0_admissible_periodic α.sit α.is_periodic α.smooth.1
+theorem leftoverFromOpen_u0 (u0 : Place → Place) (T : Time) :
+    (leftoverFromOpen u0 T).u0 = u0 :=
+  rfl
+
+theorem leftoverFromPeriodic_u0 (u0 : Place → Place) (T : Time) :
+    (leftoverFromPeriodic u0 T).u0 = u0 :=
+  rfl
+
+theorem leftoverFromOpen_isLeftover (u0 : Place → Place) {T : Time} (hT : 0 < T) :
+    (leftoverFromOpen u0 T).IsLeftover T :=
+  leftover_isLeftover (seatedOpen u0) hT
+
+theorem leftoverFromPeriodic_isLeftover (u0 : Place → Place) {T : Time}
+    (hT : 0 < T) : (leftoverFromPeriodic u0 T).IsLeftover T :=
+  leftover_isLeftover (seatedPeriodic u0) hT
+
+theorem leftoverFromOpen_open (u0 : Place → Place) (T : Time) :
+    (leftoverFromOpen u0 T).Open :=
+  rfl
+
+theorem leftoverFromPeriodic_periodic (u0 : Place → Place) (T : Time) :
+    (leftoverFromPeriodic u0 T).Periodic :=
+  rfl
+
+theorem leftoverFromOpen_unforced (u0 : Place → Place) (T : Time) :
+    (leftoverFromOpen u0 T).Unforced :=
+  rfl
+
+theorem leftoverFromPeriodic_unforced (u0 : Place → Place) (T : Time) :
+    (leftoverFromPeriodic u0 T).Unforced :=
+  rfl
 
 /-- Their (C)(D) force: C^∞ in spacetime, and Fefferman decay on sitting times. -/
 def OfficialNS.SpacetimeSmoothForce (sol : OfficialNS) : Prop :=
@@ -629,32 +635,52 @@ theorem restPeriodicCut_unforced : restPeriodicCut.Unforced :=
 theorem restPeriodicCut_periodic : restPeriodicCut.Periodic :=
   rfl
 
-/-- Rest is one inhabitant. Not the prize. -/
-def restOpenDatum : AdmissibleOpenUnforced :=
-  ⟨restOpen, restOpen_open, restOpen_unforced, restOpen_smooth⟩
+/-- Rest u0 seated is rest. leftover T := cl of rest. -/
+theorem seatedOpen_rest : seatedOpen restOpen.u0 = restOpen :=
+  rfl
 
-def restPeriodicDatum : AdmissiblePeriodicUnforced :=
-  ⟨restPeriodic, restPeriodic_periodic, restPeriodic_unforced, restPeriodic_smooth⟩
+theorem seatedPeriodic_rest : seatedPeriodic restPeriodic.u0 = restPeriodic :=
+  rfl
+
+theorem leftoverFromOpen_rest (T : Time) :
+    leftoverFromOpen restOpen.u0 T = restOpen.leftover T :=
+  rfl
+
+theorem leftoverFromPeriodic_rest (T : Time) :
+    leftoverFromPeriodic restPeriodic.u0 T = restPeriodic.leftover T :=
+  rfl
 
 /--
-  (A): leftover produced from each admissible unforced open datum
-  has OfficialSmooth. leftover T := cl. Not one rest leftover.
+  Their (A): every admissible open u0 has leftover produced from a sit
+  with that u0, OfficialA. leftover T := cl. No Smooth on u0.
+  Not proved. Rest is one inhabitant.
 -/
 def clayA : Prop :=
-  ∀ α : AdmissibleOpenUnforced, ∀ T : Time, 0 < T → OfficialA (α.leftover T)
+  ∀ u0 : Place → Place, AdmissibleOpen u0 →
+    ∃ sol : OfficialNS, ∃ T : Time, 0 < T ∧ sol.u0 = u0 ∧ OfficialA (sol.leftover T)
 
 /--
-  (B): leftover produced from each admissible unforced periodic datum.
-  The periodic analog.
+  Their (B): every admissible periodic u0. The periodic analog.
+  Not proved. Rest is one inhabitant.
 -/
 def clayB : Prop :=
-  ∀ α : AdmissiblePeriodicUnforced, ∀ T : Time, 0 < T → OfficialB (α.leftover T)
+  ∀ u0 : Place → Place, AdmissiblePeriodic u0 →
+    ∃ sol : OfficialNS, ∃ T : Time, 0 < T ∧ sol.u0 = u0 ∧ OfficialB (sol.leftover T)
 
-theorem fefferman_A : clayA :=
-  fun α _T hT => leftover_officialA α.sit hT α.is_open α.unforced α.smooth
+/-- Rest is one inhabitant of (A). Not clayA. -/
+theorem rest_inhabits_A :
+    AdmissibleOpen restOpen.u0 ∧ OfficialA (restOpen.leftover 1) :=
+  ⟨sit_u0_admissible_open restOpen restOpen_open restOpen_satisfies,
+    leftover_officialA restOpen one_pos restOpen_open restOpen_unforced
+      restOpen_smooth⟩
 
-theorem fefferman_B : clayB :=
-  fun α _T hT => leftover_officialB α.sit hT α.is_periodic α.unforced α.smooth
+/-- Rest is one inhabitant of (B). Not clayB. -/
+theorem rest_inhabits_B :
+    AdmissiblePeriodic restPeriodic.u0 ∧ OfficialB (restPeriodic.leftover 1) :=
+  ⟨sit_u0_admissible_periodic restPeriodic restPeriodic_periodic
+      restPeriodic_satisfies,
+    leftover_officialB restPeriodic one_pos restPeriodic_periodic
+      restPeriodic_unforced restPeriodic_smooth⟩
 
 /-- Jump-force sit. Leftover is produced by leftover / cl. No new force. -/
 def forcedOpenSit : OfficialNS where

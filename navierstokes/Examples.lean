@@ -10,18 +10,28 @@ open Set
   Thin / C / D: leftover on [0, 1); continuation-R missing.
   Fefferman decay on the force: SpatialSchwartz / periodic analog
   on sitting times. On [0, 1) jumpForce is 0 — that decays.
-  (A) and (B): leftover produced from each admissible unforced datum
-  has OfficialSmooth. leftover T := cl. Not one rest leftover.
+  Official datum is u0. leftover T := cl of the seated datum.
+  clayA is ∀ admissible u0. Not proved. Rest is one inhabitant.
   jumpForce is not spacetime-smooth. Forced MissingR is not Unforced.
   Official Smooth is not Smooth. Euler door empty.
 -/
 
-/-- Prize A. Leftover from each admissible unforced open datum. -/
-example : clayA :=
-  fefferman_A
+/-- Leftover produced from an open datum. leftover T := cl. u0 kept. -/
+example (u0 : Place → Place) : leftoverFromOpen u0 1 = cl (seatedOpen u0) 1 :=
+  leftoverFromOpen_eq_cl u0 1
 
-example : OfficialA (restOpenDatum.leftover 1) :=
-  fefferman_A restOpenDatum 1 one_pos
+example (u0 : Place → Place) : (leftoverFromOpen u0 1).u0 = u0 :=
+  leftoverFromOpen_u0 u0 1
+
+example (u0 : Place → Place) : (leftoverFromOpen u0 1).IsLeftover 1 :=
+  leftoverFromOpen_isLeftover u0 one_pos
+
+/-- Rest is one inhabitant. Not clayA. -/
+example : AdmissibleOpen restOpen.u0 ∧ OfficialA (restOpen.leftover 1) :=
+  rest_inhabits_A
+
+example : leftoverFromOpen restOpen.u0 1 = restOpen.leftover 1 :=
+  leftoverFromOpen_rest 1
 
 example : OfficialA (restOpen.leftover 1) :=
   leftover_officialA restOpen one_pos restOpen_open restOpen_unforced restOpen_smooth
@@ -29,21 +39,12 @@ example : OfficialA (restOpen.leftover 1) :=
 example : (restOpen.leftover 1).u0 = restOpen.u0 :=
   leftover_u0 restOpen 1
 
-example : (restOpenDatum.leftover 1).u0 = restOpenDatum.u0 :=
-  restOpenDatum.leftover_from_datum 1
+/-- Rest is one inhabitant. Not clayB. -/
+example : AdmissiblePeriodic restPeriodic.u0 ∧ OfficialB (restPeriodic.leftover 1) :=
+  rest_inhabits_B
 
-example : AdmissibleOpen restOpenDatum.u0 :=
-  restOpenDatum.u0_admissible
-
-example : AdmissiblePeriodic restPeriodicDatum.u0 :=
-  restPeriodicDatum.u0_admissible
-
-/-- Prize B. Leftover from each admissible unforced periodic datum. -/
-example : clayB :=
-  fefferman_B
-
-example : OfficialB (restPeriodicDatum.leftover 1) :=
-  fefferman_B restPeriodicDatum 1 one_pos
+example : leftoverFromPeriodic restPeriodic.u0 1 = restPeriodic.leftover 1 :=
+  leftoverFromPeriodic_rest 1
 
 example : OfficialB (restPeriodic.leftover 1) :=
   leftover_officialB restPeriodic one_pos restPeriodic_periodic
