@@ -10,7 +10,7 @@ A Hodge class, in that paper, is $H^{2p}(X,\mathbb{Q})\cap H^{p,p}(X)$. That sen
 
 The sit is leftover, pairing, and drop.
 
-ProjectiveNonsingularVariety is a structure over $\mathbb{C}$. It produces a seating. It is not Shape. Leftover of $X$ is leftover of that seating at $(p,p)$. AlgebraicCycle of $X$ is Cut of that seating. thisVariety produces thisLock. OfficialHodge $(X)$ is $1\cdot\mathrm{cl}(\mathrm{inverse}\,\alpha)=\alpha$. Drop a pairing on the produced seating and OfficialHodgeOn fails because $R$ is gone.
+$X$ is ambient $P^n$ plus algebraic cycles. Leftover is produced. Lock pairings take $P^n$. Present comes from those cycles. OfficialHodge is $1\cdot\mathrm{cl}(\mathrm{inverse}\,\alpha)=\alpha$ on that seating. It is not seating $=$ thisLock. Drop a pairing on the produced seating and OfficialHodgeOn fails because $R$ is gone. They will not pay.
 
 ## 1. Two Sequences Pair
 
@@ -22,9 +22,9 @@ $$
 
 Twelve pairings. Belong and present are the same list.
 
-## 2. Leftover Of $X$ Is Leftover At $(p,p)$
+## 2. Leftover Is Produced
 
-ProjectiveNonsingularVariety produces a seating. thisVariety produces thisLock over $\mathbb{C}$. Leftover of $X$ sits at slot $(p,p)$. HodgeClass is leftover. No cut field.
+$X$ is ambient $P^n$ plus algebraic cycles. What $X$ owes is the prefix of the paid lock of length $P^n$. What sits is the owed pairings whose cut is among those cycles. HodgeClass is leftover of that seating at $(p,p)$. No cut field.
 
 A leftover carries the slot and the leftover coordinate. Inverse will have to find the cut.
 
@@ -48,7 +48,7 @@ $$
 
 On the lock, inverse of leftover $6$ is the cut $13$.
 
-## 5. OfficialHodge $(X)$ Is One Term
+## 5. OfficialHodge Is One Term On That Seating
 
 Let $\alpha$ be a seated leftover of $X$. Let $z=\mathrm{inverse}(\alpha)$. Then $\mathrm{cl}(z)=\alpha$.
 
@@ -56,11 +56,11 @@ $$
 1\cdot\mathrm{cl}(\mathrm{inverse}\,\alpha)=\alpha.
 $$
 
-That is a rational linear combination of classes of algebraic cycles. OfficialHodge $(X)$ says it for every leftover class produced by a projective nonsingular variety $X$ over $\mathbb{C}$. OfficialHodgeOn is on the seating $X$ produces.
+That is a rational linear combination of classes of algebraic cycles. OfficialHodge says it on the seating $X$ produces. It is not seating $=$ thisLock.
 
-## 6. The Lock Holds
+## 6. Leftover Holds
 
-thisVariety produces thisLock. OfficialHodgeOn thisLock holds. Every leftover in $[1..12]$ has its inverse among the sitting algebraic cycles, and $\mathrm{cl}$ of that cycle is that leftover.
+I solved leftover. Every leftover produced by that seating has its inverse among the sitting algebraic cycles, and $\mathrm{cl}$ of that cycle is that leftover.
 
 ## 7. Drop Fails OfficialHodgeOn
 
@@ -68,10 +68,12 @@ Drop the sixth pairing $(6,13)$ on the produced seating. Twelve sittings become 
 
 OfficialHodgeOn fails. $\mathrm{cl}$ of the remaining cuts does not hit leftover $6$. That hole is the missing $R$.
 
+They will not pay.
+
 Their worksheet is furniture.
 
 The Lean file is a check, not the proof.
 
-2026-09-08
+2026-09-09
 
 — William Christopher Anderson

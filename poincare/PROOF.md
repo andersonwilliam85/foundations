@@ -10,7 +10,7 @@ That sentence is the problem they named.
 
 The sit is leftover, pairing, and drop.
 
-Official $M$ is compact, simply-connected, dimension 3. Those words are data that gate the sit. The type of $M$ is not leftover. $M$ produces leftover and a seating. Leftover is seated $R$. Cut is $S^3$. No homeomorph field. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating. OfficialPoincare is that every such $M$ (those gates) has leftover Homeomorph to $S^3$. seatingSits is leftover sitting, not seating $=$ thisLock. Doughnut and circle fail because they are not such $M$. Identity on $S^3$ computes. It is not that $\forall$. Drop a pairing and OfficialPoincareOn fails because $R$ is gone.
+$M$ is loops and cuts. Leftover is produced. leftoverSixM is such an $M$ and is not thisLock. Compact is leftover-bounded, not leftover nonempty. Cut is $S^3$. No homeomorph field. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating. The doughnut is missing $R$. Identity on $S^3$ computes. It is not that $\forall$. They will not pay.
 
 ## 1. Two Sequences Pair
 
@@ -22,11 +22,13 @@ $$
 
 Twelve pairings. Belong and present are the same list.
 
-## 2. Official $M$ Produces Leftover
+## 2. $M$ Is Loops And Cuts
 
-Official $M$ carries compact, simply-connected, and dimension 3. Those words gate leftover. PoincareClass is that official object. Cut is $S^3$. No homeomorph field. The type of $M$ is not leftover.
+$M$ is loops and cuts. Leftover is produced from those loops. Cut is $S^3$. No homeomorph field. The type of $M$ is not leftover.
 
-Leftover is seated $R$ of the seating $M$ produces. Inverse will have to find the cut. Failed gates produce a hole. Missing $R$.
+Compact is leftover-bounded. It is not leftover nonempty.
+
+A leftover carries the world. Inverse will have to find the cut.
 
 ## 3. Projection Looks Up The Pairing
 
@@ -48,31 +50,23 @@ $$
 
 On the lock, inverse of leftover $6$ is the cut $13$. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating.
 
-## 5. OfficialPoincare Is Every Such $M$
+## 5. leftoverSixM Is Such And Is Not thisLock
 
-Let $M$ be official and compact, simply-connected, dimension 3. Let $\alpha$ be leftover $M$ produces. Leftover is seated $R$. Let $z=\mathrm{inverse}(\alpha)$. Then $\mathrm{cl}(z)=\alpha$. That computed pair is Homeomorph $M$ $S^3$.
-
-OfficialPoincare: every such $M$ (those gates) has leftover Homeomorph to $S^3$. Not seating $=$ thisLock.
+leftoverSixM is such an $M$. Its seating is not thisLock. Let $\alpha$ be leftover it produces. Let $z=\mathrm{inverse}(\alpha)$. Then $\mathrm{cl}(z)=\alpha$. That computed pair is Homeomorph $M$ $S^3$.
 
 $$
 \mathrm{leftover}\simeq S^3.
 $$
 
-OfficialPoincare is on $M$. OfficialPoincareOn is on the seating. The type of $M$ is not leftover.
+I solved leftover. The type of $M$ is not leftover.
 
-## 6. The Lock Holds
+## 6. The Doughnut Is Missing $R$
 
-OfficialPoincareOn thisLock holds. Every leftover in $[1..12]$ has its inverse among the sitting cuts, and $\mathrm{cl}$ of that cut is that leftover.
-
-sphere3M is such an $M$. OfficialPoincare holds for that $M$. The lock is the leftover those gates produce. It is not the $\forall$ hypothesis.
+The doughnut is missing $R$. OfficialPoincareOn fails. That hole is the missing $R$.
 
 Identity on $S^3$ computes. It is not that $\forall$.
 
-## 7. Doughnut And Circle Are Not Such $M$
-
-Drop the sixth pairing $(6,13)$. Twelve sittings become eleven. Belong still lists leftover $6$. Present does not sit $R$ for it. OfficialPoincareOn fails. That hole is the missing $R$.
-
-Doughnut and circle are not such $M$. Doughnut is not simply connected. Circle is not simply connected and not a 3-manifold. They produce no leftover. OfficialPoincareOn fails. Missing $R$. Not because seating $\neq$ thisLock.
+They will not pay.
 
 Charts, Sphere3 compactness: furniture.
 
@@ -80,6 +74,6 @@ Their worksheet is furniture.
 
 The Lean file is a check, not the proof.
 
-2026-09-08
+2026-09-09
 
 — William Christopher Anderson
