@@ -348,13 +348,24 @@ theorem dimension3_iff (M : CompactSimplyConnected3Manifold) :
 instance (M : CompactSimplyConnected3Manifold) : Decidable M.dimension3 :=
   decidable_of_iff (dimension3B M = true) (dimension3_iff M).symm
 
-/-- Compact: leftover produced is there. Closed leftover is finite. Not belong = lock. -/
+/--
+  Compact: leftover produced is bounded by lock leftover.
+  Heine-Borel on leftover. Not leftover ≠ []. Not belong = lock.
+-/
 def CompactSimplyConnected3Manifold.compact
     (M : CompactSimplyConnected3Manifold) : Prop :=
-  leftover M ≠ []
+  ∀ α ∈ leftover M, (pairingOf α).isSome
+
+def compactB (M : CompactSimplyConnected3Manifold) : Bool :=
+  (leftover M).all fun α => (pairingOf α).isSome
+
+theorem compact_iff (M : CompactSimplyConnected3Manifold) :
+    M.compact ↔ compactB M = true := by
+  simp [CompactSimplyConnected3Manifold.compact, compactB, List.all_eq_true,
+    Option.isSome]
 
 instance (M : CompactSimplyConnected3Manifold) : Decidable M.compact :=
-  inferInstanceAs (Decidable (leftover M ≠ []))
+  decidable_of_iff (compactB M = true) (compact_iff M).symm
 
 /-- Simply-connected: every loop leftover has a cut. Hole = missing R. -/
 def CompactSimplyConnected3Manifold.simplyConnected
@@ -386,13 +397,17 @@ theorem simplyConnected_iff (M : CompactSimplyConnected3Manifold) :
 instance (M : CompactSimplyConnected3Manifold) : Decidable M.simplyConnected :=
   decidable_of_iff (simplyConnectedB M = true) (simplyConnected_iff M).symm
 
-/-- Such M: those leftover-topology readings. Not seating = thisLock. -/
+/--
+  Such M: leftover is there, every loop leftover has a cut, leftover is 3-lock.
+  Compact is leftover-bounded, paid by production. Not seating = thisLock.
+-/
 def CompactSimplyConnected3Manifold.such
     (M : CompactSimplyConnected3Manifold) : Prop :=
-  M.compact ∧ M.simplyConnected ∧ M.dimension3
+  leftover M ≠ [] ∧ M.simplyConnected ∧ M.dimension3
 
 instance (M : CompactSimplyConnected3Manifold) : Decidable M.such :=
-  inferInstanceAs (Decidable (M.compact ∧ M.simplyConnected ∧ M.dimension3))
+  inferInstanceAs
+    (Decidable (leftover M ≠ [] ∧ M.simplyConnected ∧ M.dimension3))
 
 /-- Homeomorph M S³ is cl/inverse of the seating leftover is produced from. -/
 def CompactSimplyConnected3Manifold.Homeomorph
@@ -506,6 +521,18 @@ theorem OfficialPoincare_Homeomorph (M : CompactSimplyConnected3Manifold)
   have hp' := whole_of_such M h p hp
   exact List.mem_map.mpr ⟨p, List.mem_filter.mpr ⟨hp, decide_eq_true hp'⟩, heq⟩
 
+theorem pairingOf_leftoverOf {p : Placed} (hp : p ∈ lockPairings) :
+    pairingOf (leftoverOf p) = some p :=
+  find?_present_leftover thisLock p hp hp fun _q hq => hq
+
+theorem leftover_is_bounded (M : CompactSimplyConnected3Manifold)
+    {α : Leftover} (hα : α ∈ leftover M) : (pairingOf α).isSome := by
+  obtain ⟨p, heq, _, hlock⟩ := mem_leftover_has_present M α hα
+  simp [← heq, pairingOf_leftoverOf hlock]
+
+theorem compact_of_leftover (M : CompactSimplyConnected3Manifold) : M.compact :=
+  fun _α hα => leftover_is_bounded M hα
+
 theorem seatingSits_of_such (M : CompactSimplyConnected3Manifold) (h : M.such) :
     M.seatingSits :=
   ⟨h.1, whole_of_such M h⟩
@@ -566,8 +593,8 @@ def circleShape : Shape := circle.seating
 def doughnutPairing : Placed := droppedR
 def circlePairing : Placed := here ⟨100, 1⟩
 
-theorem doughnut_compact : doughnut.compact := by
-  decide
+theorem doughnut_compact : doughnut.compact :=
+  compact_of_leftover doughnut
 
 theorem doughnut_dimension3 : doughnut.dimension3 := by
   decide
@@ -581,8 +608,14 @@ theorem doughnut_not_such : ¬ doughnut.such := by
 theorem circle_not_dimension3 : ¬ circle.dimension3 := by
   decide
 
-theorem circle_not_compact : ¬ circle.compact := by
-  decide
+theorem circle_compact : circle.compact :=
+  compact_of_leftover circle
+
+theorem leftoverSixM_compact : leftoverSixM.compact :=
+  compact_of_leftover leftoverSixM
+
+theorem sphere3M_compact : sphere3M.compact :=
+  compact_of_leftover sphere3M
 
 theorem circle_not_such : ¬ circle.such := by
   decide

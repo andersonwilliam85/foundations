@@ -47,6 +47,18 @@ example : leftoverSixM.such :=
 example : leftoverSixM.seating ≠ thisLock :=
   leftoverSixM_seating_ne_thisLock
 
+example : leftoverSixM.compact :=
+  leftoverSixM_compact
+
+example : sphere3M.compact :=
+  sphere3M_compact
+
+example : circle.compact :=
+  circle_compact
+
+example (M : CompactSimplyConnected3Manifold) : M.compact :=
+  compact_of_leftover M
+
 example : leftoverSixM.Homeomorph :=
   leftoverSixM_Homeomorph
 
@@ -174,6 +186,9 @@ def run : Bool :=
   decide sphere3M.such &&
   decide (sphere3M.seating = thisLock) &&
   decide leftoverSixM.such &&
+  decide leftoverSixM.compact &&
+  decide sphere3M.compact &&
+  decide circle.compact &&
   decide (leftoverSixM.seating ≠ thisLock) &&
   decide leftoverSixM.Homeomorph &&
   decide sphere3M.seatingSits &&
