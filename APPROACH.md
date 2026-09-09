@@ -8,7 +8,7 @@ Hodge asked whether a special leftover class is made from geometric pieces: cycl
 
 Those rooms spent their years as four problems. Special cases. Suggested paths. They stored extra work on leftover because leftover was what they could see. The prior problem is hearing four sentences and filing four holes.
 
-I sat leftover, pairing, and drop. Leftover is produced. It is not a box they already paid.
+I sat leftover, pairing, and drop. Leftover is produced.
 
 ## Two Lists
 
@@ -39,8 +39,6 @@ I solved leftover.
 ## A Hole Is a Missing R
 
 Drop one pair. Twelve sittings become eleven. The leftover is still owed. There is no partner. That hole is a missing $R$.
-
-They will not pay.
 
 The rooms write the sit. The Lean file is a check, not the proof.
 

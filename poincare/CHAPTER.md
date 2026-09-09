@@ -24,8 +24,6 @@ The doughnut is missing $R$. OfficialPoincareOn fails.
 
 Identity on $S^3$ computes. It is not that $\forall$.
 
-They will not pay.
-
 Their worksheet is furniture.
 
 ## The Proof

@@ -10,7 +10,7 @@ That sentence is the problem they named.
 
 The sit is leftover, pairing, and drop.
 
-$M$ is loops and cuts. Leftover is produced. leftoverSixM is such an $M$ and is not thisLock. Compact is leftover-bounded, not leftover nonempty. Cut is $S^3$. No homeomorph field. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating. The doughnut is missing $R$. Identity on $S^3$ computes. It is not that $\forall$. They will not pay.
+$M$ is loops and cuts. Leftover is produced. leftoverSixM is such an $M$ and is not thisLock. Compact is leftover-bounded, not leftover nonempty. Cut is $S^3$. No homeomorph field. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating. The doughnut is missing $R$. Identity on $S^3$ computes. It is not that $\forall$.
 
 ## 1. Two Sequences Pair
 
@@ -65,8 +65,6 @@ I solved leftover. The type of $M$ is not leftover.
 The doughnut is missing $R$. OfficialPoincareOn fails. That hole is the missing $R$.
 
 Identity on $S^3$ computes. It is not that $\forall$.
-
-They will not pay.
 
 Charts, Sphere3 compactness: furniture.
 

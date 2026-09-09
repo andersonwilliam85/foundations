@@ -22,8 +22,6 @@ I paired $[1..12]$ with the first twelve primes. Leftover $6$ sat with cut $13$.
 
 I dropped the sixth pairing on the produced seating. Twelve became eleven. Leftover $6$ is still owed. OfficialHodgeOn fails. That hole is the missing $R$.
 
-They will not pay.
-
 Their worksheet is furniture.
 
 ## The Proof

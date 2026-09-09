@@ -22,15 +22,13 @@ OfficialNS produces leftover. Leftover $T$ is $\mathrm{cl}$. The datum is $u_0$.
 
 clayA is $\forall$ admissible $u_0$ leftover OfficialSmooth. It is unproved. Rest is one inhabitant, not that $\forall$. jumpForce is not their force. OfficialSmooth is not Smooth.
 
-The prior problem is hearing their four sentences and filing rest as clayA, or filing OfficialSmooth as Smooth, or filing jumpForce as their force. A hole is a missing $R$. Euler, viscosity zero, is not this prize. That door is empty.
+The prior problem is hearing their four sentences and filing rest as clayA, or filing OfficialSmooth as Smooth, or filing jumpForce as their force. A hole is a missing $R$. Euler, viscosity zero, is not this problem.
 
 ## On The Leftover
 
 OfficialNS leftover $T$ is $\mathrm{cl}$. Rest leftover has OfficialSmooth. OfficialSmooth is not Smooth. The leftover is not Global; the inverse is. Rest is one inhabitant. It is not clayA.
 
 jumpForce is not their force.
-
-They will not pay.
 
 Their worksheet is furniture.
 

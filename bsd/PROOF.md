@@ -10,7 +10,7 @@ That sentence is the problem they named.
 
 The sit is leftover, pairing, and drop.
 
-$E$ is $Y^2=X^3+AX+B$ plus leftover of $E(\mathbb{Q})$. Produce pairs that leftover with the paid cuts. thisCurve produces thisLock. Not every official $E$ does. Rank is leftover. Ord $L$ is cut. That pairing is the $L$ we spend. $L$ is modeled $R$. No stored order field. Projection looks up the seated pairing. Inverse reconstructs it. Drop a pairing and OfficialBsdOn fails because $R$ is gone. They will not pay.
+$E$ is $Y^2=X^3+AX+B$ plus leftover of $E(\mathbb{Q})$. Produce pairs that leftover with the sitting cuts. thisCurve produces thisLock. Not every official $E$ does. Rank is leftover. Ord $L$ is cut. That pairing is the $L$ we spend. $L$ is modeled $R$. No stored order field. Projection looks up the seated pairing. Inverse reconstructs it. Drop a pairing and OfficialBsdOn fails because $R$ is gone.
 
 ## 1. Two Sequences Pair
 
@@ -24,7 +24,7 @@ Twelve pairings. Belong and present are the same list.
 
 ## 2. Leftover Is The Rank Reading
 
-$E$ is $Y^2=X^3+AX+B$ plus leftover of $E(\mathbb{Q})$. Produce pairs that leftover with the paid cuts. Rank is leftover. Cut is the $L$ reading. Ord $L$ is cut. No order field.
+$E$ is $Y^2=X^3+AX+B$ plus leftover of $E(\mathbb{Q})$. Produce pairs that leftover with the sitting cuts. Rank is leftover. Cut is the $L$ reading. Ord $L$ is cut. No order field.
 
 A leftover carries the slot and the leftover coordinate. Inverse will have to find the cut.
 
@@ -67,8 +67,6 @@ I solved leftover on thisCurve. Every leftover in $[1..12]$ has its inverse amon
 Drop the sixth pairing $(6,13)$ on the produced seating. Twelve sittings become eleven. Belong still lists leftover $6$. Present does not sit $R$ for it.
 
 OfficialBsdOn fails. $\mathrm{cl}$ of the remaining cuts does not hit leftover $6$. That hole is the missing $R$.
-
-They will not pay.
 
 Weierstrass, LSeries, torsion of $(0,1)$: furniture.
 

@@ -18,7 +18,7 @@ Those sentences are the problem they named.
 
 The sit is leftover, pairing, and drop.
 
-OfficialNS leftover $T$ is $\mathrm{cl}$. The datum is $u_0$. No continuation field. The continuation through $T$ is the pairing. OfficialSmooth is leftover whose continuation-$R$ sits. OfficialSmooth is not Smooth. clayA is $\forall$ admissible $u_0$ leftover OfficialSmooth. It is unproved. Rest is one inhabitant, not that $\forall$. jumpForce is not their force. They will not pay.
+OfficialNS leftover $T$ is $\mathrm{cl}$. The datum is $u_0$. No continuation field. The continuation through $T$ is the pairing. OfficialSmooth is leftover whose continuation-$R$ sits. OfficialSmooth is not Smooth. clayA is $\forall$ admissible $u_0$ leftover OfficialSmooth. It is unproved. Rest is one inhabitant, not that $\forall$. jumpForce is not their force.
 
 ## 1. OfficialNS Produces Leftover
 
@@ -64,11 +64,9 @@ Rest is one inhabitant. Rest leftover has OfficialSmooth. That is not clayA.
 
 jumpForce is not their force.
 
-They will not pay.
+## 7. Euler Is Not This Problem
 
-## 7. Euler Is Not This Prize
-
-Euler, viscosity zero, is not this prize. That door is empty.
+Euler, viscosity zero, is not this problem.
 
 Their worksheet is furniture.
 
