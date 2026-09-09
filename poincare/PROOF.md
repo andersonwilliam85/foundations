@@ -10,7 +10,7 @@ That sentence is the problem they named.
 
 The sit is leftover, pairing, and drop.
 
-CompactSimplyConnected3Manifold produces leftover and a seating. The type of $M$ is not leftover. Cut is $S^3$. No homeomorph field. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating. OfficialPoincare is that every such $M$ whose seating sits has leftover Homeomorph to $S^3$. Doughnut and circle are not such $M$. Identity on $S^3$ computes. It is not that $\forall$. Drop a pairing and OfficialPoincareOn fails because $R$ is gone.
+Official $M$ is compact, simply-connected, dimension 3. Those words are data that gate the sit. The type of $M$ is not leftover. $M$ produces leftover and a seating. Leftover is seated $R$. Cut is $S^3$. No homeomorph field. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating. OfficialPoincare is that every such $M$ (those gates) has leftover Homeomorph to $S^3$. seatingSits is leftover sitting, not seating $=$ thisLock. Doughnut and circle fail because they are not such $M$. Identity on $S^3$ computes. It is not that $\forall$. Drop a pairing and OfficialPoincareOn fails because $R$ is gone.
 
 ## 1. Two Sequences Pair
 
@@ -22,11 +22,11 @@ $$
 
 Twelve pairings. Belong and present are the same list.
 
-## 2. CompactSimplyConnected3Manifold Produces Leftover
+## 2. Official $M$ Produces Leftover
 
-CompactSimplyConnected3Manifold produces leftover and a seating. PoincareClass is that structure. Cut is $S^3$. No homeomorph field. The type of $M$ is not leftover.
+Official $M$ carries compact, simply-connected, and dimension 3. Those words gate leftover. PoincareClass is that official object. Cut is $S^3$. No homeomorph field. The type of $M$ is not leftover.
 
-A leftover carries the world. Inverse will have to find the cut. thisLock seating is produced by one such $M$.
+Leftover is seated $R$ of the seating $M$ produces. Inverse will have to find the cut. Failed gates produce a hole. Missing $R$.
 
 ## 3. Projection Looks Up The Pairing
 
@@ -48,11 +48,11 @@ $$
 
 On the lock, inverse of leftover $6$ is the cut $13$. Homeomorph $M$ $S^3$ is $\mathrm{cl}/\mathrm{inverse}$ of that seating.
 
-## 5. OfficialPoincare Is Every Such $M$ Whose Seating Sits
+## 5. OfficialPoincare Is Every Such $M$
 
-Let $M$ be a CompactSimplyConnected3Manifold whose seating sits. Let $\alpha$ be the leftover it produces. Let $z=\mathrm{inverse}(\alpha)$. Then $\mathrm{cl}(z)=\alpha$. That computed pair is Homeomorph $M$ $S^3$.
+Let $M$ be official and compact, simply-connected, dimension 3. Let $\alpha$ be leftover $M$ produces. Leftover is seated $R$. Let $z=\mathrm{inverse}(\alpha)$. Then $\mathrm{cl}(z)=\alpha$. That computed pair is Homeomorph $M$ $S^3$.
 
-OfficialPoincare: every such $M$ whose seating sits has leftover Homeomorph to $S^3$.
+OfficialPoincare: every such $M$ (those gates) has leftover Homeomorph to $S^3$. Not seating $=$ thisLock.
 
 $$
 \mathrm{leftover}\simeq S^3.
@@ -64,7 +64,7 @@ OfficialPoincare is on $M$. OfficialPoincareOn is on the seating. The type of $M
 
 OfficialPoincareOn thisLock holds. Every leftover in $[1..12]$ has its inverse among the sitting cuts, and $\mathrm{cl}$ of that cut is that leftover.
 
-lockM produces thisLock seating. OfficialPoincare holds for that $M$.
+sphere3M is such an $M$. OfficialPoincare holds for that $M$. The lock is the leftover those gates produce. It is not the $\forall$ hypothesis.
 
 Identity on $S^3$ computes. It is not that $\forall$.
 
@@ -72,7 +72,7 @@ Identity on $S^3$ computes. It is not that $\forall$.
 
 Drop the sixth pairing $(6,13)$. Twelve sittings become eleven. Belong still lists leftover $6$. Present does not sit $R$ for it. OfficialPoincareOn fails. That hole is the missing $R$.
 
-Doughnut and circle are not such $M$. Their seating does not sit. They are not simply connected. OfficialPoincareOn fails. Missing $R$.
+Doughnut and circle are not such $M$. Doughnut is not simply connected. Circle is not simply connected and not a 3-manifold. They produce no leftover. OfficialPoincareOn fails. Missing $R$. Not because seating $\neq$ thisLock.
 
 Charts, Sphere3 compactness: furniture.
 

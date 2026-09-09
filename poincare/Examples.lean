@@ -7,12 +7,13 @@ open scoped Manifold ContDiff
 
 /-
   Two worlds and a map that computes.
-  OfficialPoincare is the Clay sentence as pairing.
-  CompactSimplyConnected3Manifold is a structure. It produces leftover
-  and a seating. The type of M is not Leftover.
+  OfficialPoincare is the Clay sentence as leftover Homeomorph.
+  Official M is compact, simply-connected, dimension 3. Those
+  words gate the sit. Type of M is not Leftover.
+  M produces leftover and a seating. Leftover is seated R.
   Homeomorph M S³ is cl/inverse of that seating.
-  OfficialPoincareOn sits on leftover / cl / inverse.
-  Doughnut and circle: not such M. Missing R. OfficialPoincareOn fails.
+  seatingSits is leftover sitting. Not seating = thisLock.
+  Doughnut and circle fail the gates. Missing R.
   Identity on Sphere3 computes. It is not the ∀-prize witness.
   Furniture: charts, doughnut fail, circle fail.
   `#eval run` is Bool.
@@ -42,24 +43,30 @@ example : ¬ dropSixth.Hole stranger :=
 example : OfficialPoincareOn thisLock :=
   OfficialPoincareOn_thisLock
 
-example : lockM.seating = thisLock :=
-  lockM_seating_is_thisLock
+example : sphere3M.such :=
+  sphere3M_such
 
-example : lockM.seatingSits := by
-  decide
+example : lockM.such :=
+  lockM_such
+
+example : leftover sphere3M = lockPairings.map leftoverOf :=
+  leftover_of_such sphere3M sphere3M_such
+
+example : sphere3M.seatingSits :=
+  seatingSits_of_such sphere3M sphere3M_such
 
 /-- OfficialPoincare: leftover 6 pairs with cut 13. The pairing computes. -/
 example : inverse thisLock.present ⟨6⟩ = some ⟨13⟩ ∧
     cl thisLock.present ⟨13⟩ = some ⟨6⟩ := by
   decide
 
-example : lockM.Homeomorph := by
-  decide
+example : sphere3M.Homeomorph :=
+  OfficialPoincare_Homeomorph sphere3M sphere3M_such
 
-example (M : CompactSimplyConnected3Manifold)
-    (hSit : M.seatingSits) :
-    M.Homeomorph :=
-  OfficialPoincare M hSit
+example (M : OfficialManifold) (h : M.such)
+    (α : Leftover) (hα : α ∈ leftover M) :
+    α.Homeomorph M.seating :=
+  OfficialPoincare M h α hα
 
 example : ¬ OfficialPoincareOn dropSixth :=
   not_OfficialPoincareOn_drop
@@ -67,31 +74,43 @@ example : ¬ OfficialPoincareOn dropSixth :=
 example : dropSixth.present.length = 11 :=
   drop_count_12_to_11.2
 
-/-- Doughnut: missing R. Pairing does not sit. OfficialPoincareOn fails. -/
+/-- Doughnut: not such M. Not simply connected. Missing R. -/
 example : doughnutShape.Hole doughnutPairing ∧
     ¬ SimplyConnectedSpace Doughnut ∧
-    ¬ OfficialPoincareOn doughnutShape :=
+    ¬ OfficialPoincareOn doughnutShape ∧
+    ¬ doughnut.such :=
   doughnut_missing_R
 
-/-- Circle: missing R. OfficialPoincareOn fails. -/
+/-- Circle: not such M. Not simply connected. Not a 3-manifold. Missing R. -/
 example : circleShape.Hole circlePairing ∧
     ¬ SimplyConnectedSpace Circle ∧
-    ¬ OfficialPoincareOn circleShape :=
+    ¬ OfficialPoincareOn circleShape ∧
+    ¬ circle.such :=
   circle_missing_R
 
-/-- Doughnut is not such an M. -/
-example : ¬ doughnutM.seatingSits ∧
-    ¬ doughnutM.Homeomorph ∧
-    ¬ OfficialPoincareOn doughnutM.seating ∧
+/-- Doughnut fails because it is not simply connected. Not because seating = thisLock. -/
+example : ¬ doughnut.such ∧
+    doughnut.simplyConnected = false ∧
+    ¬ doughnut.seatingSits ∧
+    ¬ doughnut.Homeomorph ∧
+    leftover doughnut = [] ∧
+    ¬ OfficialPoincareOn doughnut.seating ∧
     ¬ SimplyConnectedSpace Doughnut :=
-  doughnut_not_such_M
+  ⟨doughnut_not_such, doughnut_fails_because_not_simply_connected.1,
+    by decide, by decide, doughnut_produces_no_leftover,
+    not_OfficialPoincareOn_doughnut, doughnut_fails_simply_connected⟩
 
-/-- Circle is not such an M. -/
-example : ¬ circleM.seatingSits ∧
-    ¬ circleM.Homeomorph ∧
-    ¬ OfficialPoincareOn circleM.seating ∧
+/-- Circle fails because it is not such M. Not a 3-manifold. Not simply connected. -/
+example : ¬ circle.such ∧
+    circle.dimension ≠ 3 ∧
+    ¬ circle.seatingSits ∧
+    ¬ circle.Homeomorph ∧
+    leftover circle = [] ∧
+    ¬ OfficialPoincareOn circle.seating ∧
     ¬ SimplyConnectedSpace Circle :=
-  circle_not_such_M
+  ⟨circle_not_such, circle_fails_because_not_such_M.2,
+    by decide, by decide, circle_produces_no_leftover,
+    not_OfficialPoincareOn_circle, circle_fails_simply_connected⟩
 
 /-- The 3-sphere is a closed 3-manifold: compact, Hausdorff, charted on ℝ³. -/
 example : CompactSpace Sphere3 := inferInstance
@@ -119,10 +138,12 @@ example : Nonempty (Sphere3 ≃ₜ Sphere3) :=
 /-- Identity on Sphere3 computes. It is not OfficialPoincare. Not ∀ such M. -/
 example : Nonempty (Sphere3 ≃ₜ Sphere3) ∧ ¬ OfficialPoincareOn doughnutShape ∧
     ¬ OfficialPoincareOn circleShape ∧
-    ¬ doughnutM.seatingSits ∧
-    ¬ circleM.seatingSits ∧
-    ¬ doughnutLeftover.seatedOn thisLock ∧
-    ¬ circleLeftover.seatedOn thisLock :=
+    ¬ doughnut.such ∧
+    ¬ circle.such ∧
+    ¬ doughnut.seatingSits ∧
+    ¬ circle.seatingSits ∧
+    leftover doughnut = [] ∧
+    leftover circle = [] :=
   identity_computes_not_prize
 
 /-- Simply connected transfers along a homeomorphism. Furniture. -/
@@ -161,19 +182,25 @@ def run : Bool :=
   decide (¬ dropSixth.Whole) &&
   decide (dropSixth.Hole sixth) &&
   decide (OfficialPoincareOn thisLock) &&
-  decide (lockM.seating = thisLock) &&
-  decide lockM.seatingSits &&
-  decide lockM.Homeomorph &&
+  decide sphere3M.such &&
+  decide sphere3M.seatingSits &&
+  decide sphere3M.Homeomorph &&
   decide (¬ OfficialPoincareOn dropSixth) &&
   decide (doughnutShape.Hole doughnutPairing) &&
   decide (¬ OfficialPoincareOn doughnutShape) &&
-  decide (¬ doughnutM.seatingSits) &&
-  decide (¬ doughnutM.Homeomorph) &&
+  decide (¬ doughnut.such) &&
+  decide (¬ doughnut.seatingSits) &&
+  decide (¬ doughnut.Homeomorph) &&
+  decide (leftover doughnut = []) &&
   decide (circleShape.Hole circlePairing) &&
   decide (¬ OfficialPoincareOn circleShape) &&
-  decide (¬ circleM.seatingSits) &&
-  decide (¬ circleM.Homeomorph) &&
+  decide (¬ circle.such) &&
+  decide (¬ circle.seatingSits) &&
+  decide (¬ circle.Homeomorph) &&
+  decide (leftover circle = []) &&
   decide (thisLock.present.length = 12) &&
-  decide (dropSixth.present.length = 11)
+  decide (dropSixth.present.length = 11) &&
+  decide (doughnut.simplyConnected = false) &&
+  decide (circle.dimension ≠ 3)
 
 #eval run

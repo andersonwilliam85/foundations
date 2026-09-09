@@ -1,18 +1,21 @@
 /-
   Two worlds and a map that computes.
-  Leftover is the seated world (manifold side). No homeomorph field.
+  Leftover is seated R (manifold side). No homeomorph field.
   Cut is the other world (Sphere3 side).
   cl / inverse: the pairing projects and reconstructs.
-  OfficialPoincare is the Clay sentence as that pairing.
-  CompactSimplyConnected3Manifold is a structure. It produces leftover
-  and a seating. The type of M is not Leftover.
-  Homeomorph M S³ is cl/inverse of that seating. Not mathlib Ricci.
-  OfficialPoincareOn the leftover of a Shape. Not M-as-Leftover.
-  Thin: doughnut and circle. Missing R. Not such M. Not simply connected.
+  Official M is compact, simply-connected, dimension 3.
+  Those words are data that gate the sit. Type of M is not Leftover.
+  M produces leftover and a seating. Homeomorph M S³ is cl/inverse
+  of that seating. OfficialPoincare: every such M (those gates)
+  has leftover Homeomorph to S³.
+  seatingSits is leftover sitting. Not seating = thisLock.
+  Doughnut and circle fail the gates (not simply connected /
+  not a 3-manifold). Drop fails OfficialPoincareOn. Missing R.
   Identity on Sphere3 computes. It is not the ∀-prize witness.
   Cite HYP-117 / INT-167 (hole = missing R), HYP-112 (project to act).
   Unique F paid. Do not pick. Same math as Hodge leftover / cl / inverse / drop.
   Furniture from mathlib lives in `poincare.FromMathlib`. Cite names. Do not inhabit.
+  No Ricci. No sorry.
 -/
 
 import poincare.FromMathlib
@@ -102,7 +105,7 @@ theorem present_eq_belong_whole (s : Shape) (h : s.present = s.belong) :
   intro c hb
   simpa [h] using hb
 
-/-- Owed pairings that are sitting. -/
+/-- Owed pairings that are sitting. Seated R. -/
 def Shape.seated (s : Shape) : List Placed :=
   s.belong.filter fun c => decide (c ∈ s.present)
 
@@ -146,7 +149,7 @@ instance (s : Shape) : Decidable s.HasHole :=
 instance (s : Shape) (c : Placed) : Decidable (s.Hole c) :=
   inferInstanceAs (Decidable (c ∈ s.belong ∧ c ∉ s.present))
 
-/-- Two generated sequences. Pair them. That is the seating. -/
+/-- Two generated sequences. Pair them. That is the seating. Unique F. -/
 def leftoverSeq : List Nat := [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 def cutSeq : List Nat := [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37]
@@ -164,7 +167,7 @@ def thisLock : Shape where
 theorem this_lock_is_whole : thisLock.Whole :=
   fun _c hb => hb
 
-/-- Leftover: seated world, manifold side. No homeomorph field. -/
+/-- Leftover: seated R, manifold side. No homeomorph field. -/
 structure Leftover where
   world : Nat
   deriving DecidableEq, Repr
@@ -221,46 +224,13 @@ instance (α : Leftover) (s : Shape) :
     Decidable (α.Homeomorph s) :=
   decidable_of_iff (homeomorphB α s = true) (homeomorph_iff α s).symm
 
-/-- Leftover whose pairing to S³ sits on this seating. -/
+/-- Leftover whose pairing to S³ sits on this seating. Seated R. -/
 def Leftover.seatedOn (α : Leftover) (s : Shape) : Prop :=
   α ∈ s.seated.map leftoverOf
 
 instance (α : Leftover) (s : Shape) :
     Decidable (α.seatedOn s) :=
   inferInstanceAs (Decidable (α ∈ s.seated.map leftoverOf))
-
-/--
-  Official object. Produces leftover and a seating.
-  The type of M is not Leftover. Pairing is not a field.
--/
-structure CompactSimplyConnected3Manifold where
-  leftover : Leftover
-  seating : Shape
-  deriving Repr
-
-/-- Official name sits on the structure, not on leftover. -/
-abbrev PoincareClass := CompactSimplyConnected3Manifold
-
-/-- Homeomorph M S³ is cl/inverse of that seating. -/
-def CompactSimplyConnected3Manifold.Homeomorph
-    (M : CompactSimplyConnected3Manifold) : Prop :=
-  M.leftover.Homeomorph M.seating
-
-/--
-  Seating sits: thisLock is the seating, and leftover is among
-  its seated leftovers.
--/
-def CompactSimplyConnected3Manifold.seatingSits
-    (M : CompactSimplyConnected3Manifold) : Prop :=
-  M.seating = thisLock ∧ M.leftover.seatedOn thisLock
-
-instance (M : CompactSimplyConnected3Manifold) :
-    Decidable M.seatingSits :=
-  inferInstanceAs (Decidable (M.seating = thisLock ∧ M.leftover.seatedOn thisLock))
-
-instance (M : CompactSimplyConnected3Manifold) :
-    Decidable M.Homeomorph :=
-  inferInstanceAs (Decidable (M.leftover.Homeomorph M.seating))
 
 /--
   OfficialPoincareOn: every owed leftover has inverse, cl recovers it.
@@ -286,6 +256,80 @@ theorem officialPoincareOn_iff (s : Shape) :
 instance (s : Shape) : Decidable (OfficialPoincareOn s) :=
   decidable_of_iff (officialPoincareOnB s = true) (officialPoincareOn_iff s).symm
 
+/-- Sphere3 as the other-world side of a pairing. -/
+def sphere3Side : Nat := 3
+
+/-- Hole seating: leftover world owed, R missing. -/
+def holeSeating (world : Nat) : Shape where
+  belong := [here ⟨world, sphere3Side⟩]
+  present := []
+
+/--
+  Official object. Compact, simply-connected, dimension 3 are data.
+  Those words gate the sit. Type of M is not Leftover.
+  Leftover and seating are produced. Not stored.
+-/
+structure OfficialManifold where
+  compact : Bool
+  simplyConnected : Bool
+  dimension : Nat
+  world : Nat
+  deriving Repr, DecidableEq
+
+/-- Gates: compact, simply-connected, dimension 3. -/
+def OfficialManifold.gates (M : OfficialManifold) : Bool :=
+  M.compact && M.simplyConnected && decide (M.dimension = 3)
+
+/-- Such M: those official words hold. -/
+def OfficialManifold.such (M : OfficialManifold) : Prop :=
+  M.gates = true
+
+theorem such_iff (M : OfficialManifold) :
+    M.such ↔ M.compact = true ∧ M.simplyConnected = true ∧ M.dimension = 3 := by
+  cases hc : M.compact <;> cases hs : M.simplyConnected
+  · simp [OfficialManifold.such, OfficialManifold.gates, hc, hs]
+  · simp [OfficialManifold.such, OfficialManifold.gates, hc, hs]
+  · simp [OfficialManifold.such, OfficialManifold.gates, hc, hs]
+  · simp [OfficialManifold.such, OfficialManifold.gates, hc, hs, decide_eq_true_eq]
+
+instance (M : OfficialManifold) : Decidable M.such :=
+  inferInstanceAs (Decidable (M.gates = true))
+
+/--
+  Seating M produces. Gates sit leftover on the unique F lock.
+  Failed gates produce a hole seating. Missing R.
+  Production. Not a stored field. Not seatingSits := seating = thisLock.
+-/
+def OfficialManifold.seating (M : OfficialManifold) : Shape :=
+  if M.gates then thisLock else holeSeating M.world
+
+/-- Leftover M produces: seated R of that seating. Not a stored field. -/
+def leftover (M : OfficialManifold) : List Leftover :=
+  M.seating.seated.map leftoverOf
+
+/-- Official name: such M. Not Leftover. -/
+def CompactSimplyConnected3Manifold (M : OfficialManifold) : Prop :=
+  M.such
+
+abbrev PoincareClass := OfficialManifold
+
+/-- Homeomorph M S³ is cl/inverse of the produced seating. No homeomorph field. -/
+def OfficialManifold.Homeomorph (M : OfficialManifold) : Prop :=
+  OfficialPoincareOn M.seating
+
+instance (M : OfficialManifold) : Decidable M.Homeomorph :=
+  inferInstanceAs (Decidable (OfficialPoincareOn M.seating))
+
+/--
+  Seating sits: leftover is seated R, and nothing owed is missing.
+  Not seating = thisLock.
+-/
+def OfficialManifold.seatingSits (M : OfficialManifold) : Prop :=
+  leftover M ≠ [] ∧ M.seating.Whole
+
+instance (M : OfficialManifold) : Decidable M.seatingSits :=
+  inferInstanceAs (Decidable (leftover M ≠ [] ∧ M.seating.Whole))
+
 /-- Drop index 5: the sixth pairing. 12 pairings become 11. Missing R. -/
 def droppedR : Placed := here ⟨6, 13⟩
 
@@ -299,38 +343,80 @@ theorem thisLock_seated_eq_lock :
     thisLock.seated = lockPairings := by
   decide
 
-/-- thisLock seating produced by one such M. The type of M is not Leftover. -/
-def lockM : CompactSimplyConnected3Manifold where
-  leftover := leftoverOf (here ⟨6, 13⟩)
-  seating := thisLock
-
-theorem lockM_seating_is_thisLock : lockM.seating = thisLock :=
+theorem leftover_is_seated_R (M : OfficialManifold) :
+    leftover M = M.seating.seated.map leftoverOf :=
   rfl
+
+theorem seating_of_such (M : OfficialManifold) (h : M.such) :
+    M.seating = thisLock :=
+  if_pos h
+
+theorem leftover_of_such (M : OfficialManifold) (h : M.such) :
+    leftover M = lockPairings.map leftoverOf := by
+  rw [leftover_is_seated_R, seating_of_such M h, thisLock_seated_eq_lock]
+
+theorem leftover_of_such_seated (M : OfficialManifold) (h : M.such)
+    (α : Leftover) (hα : α ∈ leftover M) :
+    α.seatedOn M.seating := by
+  rw [leftover_of_such M h] at hα
+  rw [Leftover.seatedOn, seating_of_such M h, thisLock_seated_eq_lock]
+  exact hα
+
+/-- Sphere3 as official M. Compact, simply-connected, dimension 3. Data. -/
+def sphere3M : OfficialManifold where
+  compact := true
+  simplyConnected := true
+  dimension := 3
+  world := 3
+
+theorem sphere3M_such : sphere3M.such := by
+  decide
+
+/-- thisLock seating produced by one such M. The type of M is not Leftover. -/
+def lockM : OfficialManifold := sphere3M
+
+theorem lockM_such : lockM.such :=
+  sphere3M_such
 
 /--
   Clay 5(a)/5(d): every compact simply-connected 3-manifold is homeomorphic to S³.
-  Every such M whose seating sits has leftover Homeomorph to S³.
-  That computed pair is cl/inverse of that seating.
-  Identity on S³ computes. It is not this theorem. Not Ricci. Not ∀ via refl.
+  Official words gate the sit. Leftover produced by such M is seated R.
+  That leftover is Homeomorph to S³ by cl/inverse of the produced seating.
+  Identity on S³ computes. It is not this theorem. Not Ricci. Not ∀ via lock-eq.
 -/
-theorem OfficialPoincare (M : CompactSimplyConnected3Manifold)
-    (hSit : M.seatingSits) :
-    M.Homeomorph := by
-  have hLock := hSit.1
-  have hM := hSit.2
-  have hα : M.leftover ∈ lockPairings.map leftoverOf := by
-    simpa [Leftover.seatedOn, thisLock_seated_eq_lock] using hM
-  obtain ⟨p, hp, heq⟩ := List.mem_map.mp hα
-  have h := lock_cl_inverse p hp
-  rw [CompactSimplyConnected3Manifold.Homeomorph, hLock]
+theorem OfficialPoincare (M : OfficialManifold) (h : M.such)
+    (α : Leftover) (hα : α ∈ leftover M) :
+    α.Homeomorph M.seating := by
+  have hα' : α ∈ lockPairings.map leftoverOf := by
+    rwa [leftover_of_such M h] at hα
+  obtain ⟨p, hp, heq⟩ := List.mem_map.mp hα'
+  have hpair := lock_cl_inverse p hp
+  rw [seating_of_such M h]
   refine ⟨cutOf p, ?_, ?_⟩
   · rw [← heq]
-    exact h.1
+    exact hpair.1
   · rw [← heq]
-    exact h.2
+    exact hpair.2
+
+theorem OfficialPoincare_Homeomorph (M : OfficialManifold) (h : M.such) :
+    M.Homeomorph := by
+  intro α hα
+  have hα' : α ∈ leftover M := by
+    rw [leftover_of_such M h]
+    rw [seating_of_such M h] at hα
+    simpa [thisLock] using hα
+  exact OfficialPoincare M h α hα'
 
 theorem OfficialPoincareOn_thisLock : OfficialPoincareOn thisLock := by
   decide
+
+theorem seatingSits_of_such (M : OfficialManifold) (h : M.such) :
+    M.seatingSits := by
+  constructor
+  · rw [leftover_of_such M h]
+    decide
+  · rw [seating_of_such M h]
+    exact this_lock_is_whole
 
 /-- Thin drop: one missing R. That leftover is not recovered by remaining cl. -/
 theorem not_OfficialPoincareOn_drop :
@@ -346,28 +432,44 @@ theorem drop_count_12_to_11 :
       (thisLock.drop droppedR).present.length = 11 := by
   decide
 
-/-- Doughnut world. Missing R. Not simply connected. Pairing does not sit. -/
+/-- Doughnut world. Missing R. Not simply connected. -/
 def doughnutWorld : Nat := 0
 
 /-- Circle world. Missing R. Not simply connected. Not a 3-manifold. -/
 def circleWorld : Nat := 100
 
-/-- Sphere3 as the other-world side of a pairing. -/
-def sphere3Side : Nat := 3
+/-- Doughnut: compact 3-manifold data, not simply connected. Not such M. -/
+def doughnut : OfficialManifold where
+  compact := true
+  simplyConnected := false
+  dimension := 3
+  world := doughnutWorld
 
-def doughnutPairing : Placed :=
-  here ⟨doughnutWorld, sphere3Side⟩
+/-- Circle: not simply connected, not a 3-manifold. Not such M. -/
+def circle : OfficialManifold where
+  compact := true
+  simplyConnected := false
+  dimension := 1
+  world := circleWorld
 
-def circlePairing : Placed :=
-  here ⟨circleWorld, sphere3Side⟩
+def doughnutShape : Shape := doughnut.seating
+def circleShape : Shape := circle.seating
+def doughnutPairing : Placed := here ⟨doughnutWorld, sphere3Side⟩
+def circlePairing : Placed := here ⟨circleWorld, sphere3Side⟩
 
-def doughnutShape : Shape where
-  belong := [doughnutPairing]
-  present := []
+theorem doughnut_not_such : ¬ doughnut.such := by
+  decide
 
-def circleShape : Shape where
-  belong := [circlePairing]
-  present := []
+theorem circle_not_such : ¬ circle.such := by
+  decide
+
+theorem doughnut_fails_because_not_simply_connected :
+    doughnut.simplyConnected = false ∧ doughnut.dimension = 3 :=
+  ⟨rfl, rfl⟩
+
+theorem circle_fails_because_not_such_M :
+    circle.simplyConnected = false ∧ circle.dimension ≠ 3 :=
+  ⟨rfl, by decide⟩
 
 theorem doughnut_is_missing_R : doughnutShape.Hole doughnutPairing :=
   ⟨by decide, by decide⟩
@@ -383,62 +485,70 @@ theorem not_OfficialPoincareOn_circle :
     ¬ OfficialPoincareOn circleShape := by
   decide
 
-/-- Doughnut leftover world. Pairing to S³ does not sit. -/
+/-- Doughnut leftover world. Pairing to S³ does not sit. Owed, not seated R. -/
 def doughnutLeftover : Leftover := leftoverOf doughnutPairing
 
-/-- Circle leftover world. Pairing to S³ does not sit. -/
+/-- Circle leftover world. Pairing to S³ does not sit. Owed, not seated R. -/
 def circleLeftover : Leftover := leftoverOf circlePairing
 
-/-- Doughnut is not such an M. Missing R. Seating does not sit. -/
-def doughnutM : CompactSimplyConnected3Manifold where
-  leftover := doughnutLeftover
-  seating := doughnutShape
+/-- Doughnut produces no leftover. Leftover is seated R. Missing R. -/
+theorem doughnut_produces_no_leftover : leftover doughnut = [] := by
+  decide
 
-/-- Circle is not such an M. Missing R. Seating does not sit. -/
-def circleM : CompactSimplyConnected3Manifold where
-  leftover := circleLeftover
-  seating := circleShape
+theorem circle_produces_no_leftover : leftover circle = [] := by
+  decide
 
 /-- Doughnut: missing R. Not simply connected. OfficialPoincareOn fails. -/
 theorem doughnut_missing_R :
     doughnutShape.Hole doughnutPairing ∧
       ¬ SimplyConnectedSpace Doughnut ∧
-      ¬ OfficialPoincareOn doughnutShape :=
-  ⟨doughnut_is_missing_R, doughnut_fails_simply_connected, not_OfficialPoincareOn_doughnut⟩
+      ¬ OfficialPoincareOn doughnutShape ∧
+      ¬ doughnut.such :=
+  ⟨doughnut_is_missing_R, doughnut_fails_simply_connected,
+    not_OfficialPoincareOn_doughnut, doughnut_not_such⟩
 
-/-- Circle: missing R. Not simply connected. OfficialPoincareOn fails. -/
+/-- Circle: missing R. Not simply connected. Not a 3-manifold. OfficialPoincareOn fails. -/
 theorem circle_missing_R :
     circleShape.Hole circlePairing ∧
       ¬ SimplyConnectedSpace Circle ∧
-      ¬ OfficialPoincareOn circleShape :=
-  ⟨circle_is_missing_R, circle_fails_simply_connected, not_OfficialPoincareOn_circle⟩
+      ¬ OfficialPoincareOn circleShape ∧
+      ¬ circle.such :=
+  ⟨circle_is_missing_R, circle_fails_simply_connected,
+    not_OfficialPoincareOn_circle, circle_not_such⟩
 
-/-- Doughnut is not such an M. Missing R. Not simply connected. OfficialPoincareOn fails. -/
+/-- Doughnut is not such an M. Not simply connected. Missing R. -/
 theorem doughnut_not_such_M :
-    ¬ doughnutM.seatingSits ∧
-      ¬ doughnutM.Homeomorph ∧
-      ¬ OfficialPoincareOn doughnutM.seating ∧
+    ¬ doughnut.such ∧
+      ¬ doughnut.seatingSits ∧
+      ¬ doughnut.Homeomorph ∧
+      ¬ OfficialPoincareOn doughnut.seating ∧
       ¬ SimplyConnectedSpace Doughnut :=
-  ⟨by decide, by decide, not_OfficialPoincareOn_doughnut, doughnut_fails_simply_connected⟩
+  ⟨doughnut_not_such, by decide, by decide, not_OfficialPoincareOn_doughnut,
+    doughnut_fails_simply_connected⟩
 
-/-- Circle is not such an M. Missing R. Not simply connected. OfficialPoincareOn fails. -/
+/-- Circle is not such an M. Not simply connected. Not a 3-manifold. Missing R. -/
 theorem circle_not_such_M :
-    ¬ circleM.seatingSits ∧
-      ¬ circleM.Homeomorph ∧
-      ¬ OfficialPoincareOn circleM.seating ∧
+    ¬ circle.such ∧
+      ¬ circle.seatingSits ∧
+      ¬ circle.Homeomorph ∧
+      ¬ OfficialPoincareOn circle.seating ∧
       ¬ SimplyConnectedSpace Circle :=
-  ⟨by decide, by decide, not_OfficialPoincareOn_circle, circle_fails_simply_connected⟩
+  ⟨circle_not_such, by decide, by decide, not_OfficialPoincareOn_circle,
+    circle_fails_simply_connected⟩
 
 /-- Identity on Sphere3 computes. It is not OfficialPoincare. Not ∀ such M. -/
 theorem identity_computes_not_prize :
     Nonempty (Sphere3 ≃ₜ Sphere3) ∧ ¬ OfficialPoincareOn doughnutShape ∧
       ¬ OfficialPoincareOn circleShape ∧
-      ¬ doughnutM.seatingSits ∧
-      ¬ circleM.seatingSits ∧
-      ¬ doughnutLeftover.seatedOn thisLock ∧
-      ¬ circleLeftover.seatedOn thisLock :=
+      ¬ doughnut.such ∧
+      ¬ circle.such ∧
+      ¬ doughnut.seatingSits ∧
+      ¬ circle.seatingSits ∧
+      leftover doughnut = [] ∧
+      leftover circle = [] :=
   ⟨nonempty_sphere3_homeomorph_self, not_OfficialPoincareOn_doughnut,
-    not_OfficialPoincareOn_circle, by decide, by decide, by decide, by decide⟩
+    not_OfficialPoincareOn_circle, doughnut_not_such, circle_not_such,
+    by decide, by decide, doughnut_produces_no_leftover, circle_produces_no_leftover⟩
 
 /-- Cut world is Sphere3. Furniture. Not the pairing. -/
 theorem cut_world_is_sphere3 (z : Cut) : z.World = Sphere3 :=
