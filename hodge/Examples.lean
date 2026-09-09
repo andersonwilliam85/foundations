@@ -2,8 +2,8 @@ import hodge.Proof
 
 /-
   Shape seating plus leftover / cl / inverse.
-  ProjectiveNonsingularVariety is Ground + Embedding + Regularity.
-  Leftover is computed. AlgebraicCycle is Cut.
+  ProjectiveNonsingularVariety is ambient and cycles.
+  Leftover is produced from X. AlgebraicCycle is Cut.
   FromMathlib is furniture. OfficialHodge sits on Proof.
   `#eval run` is Bool.
 -/
@@ -121,14 +121,8 @@ example : leftoverSix ∈ dropSixth.belong.map leftoverOf ∧
 example : dropSixth.present.length = 11 :=
   drop_count_12_to_11.2
 
-example : ¬ notOverC.Official ∧ notOverC.leftover = [] :=
-  ⟨notOverC_not_official, notOverC_leftover_empty⟩
-
-example : ¬ affineX.Official ∧ affineX.leftover = [] :=
-  ⟨affineX_not_official, affineX_leftover_empty⟩
-
-example : ¬ pointX.Official ∧ pointX.leftover = [] :=
-  ⟨pointX_not_official, pointX_leftover_empty⟩
+example : leftoverFromCut ⟨13⟩ = some leftoverSix := by
+  decide
 
 example : ¬ singularX.Official ∧ ¬ OfficialHodgeOn singularX.seating ∧
     singularX.seating.Hole droppedR :=
@@ -153,10 +147,7 @@ def run : Bool :=
   decide (¬ isSpanOfCl leftoverSix dropSixth.present) &&
   decide (thisLock.present.length = 12) &&
   decide (dropSixth.present.length = 11) &&
-  decide (¬ notOverC.Official) &&
-  decide (notOverC.leftover = []) &&
-  decide (¬ affineX.Official) &&
-  decide (¬ pointX.Official) &&
+  decide (leftoverFromCut ⟨13⟩ = some leftoverSix) &&
   decide (¬ singularX.Official) &&
   decide (¬ OfficialHodgeOn singularX.seating) &&
   decide (singularX.seating.Hole droppedR)

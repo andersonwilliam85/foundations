@@ -5,10 +5,9 @@
   cl is the projection from cut to leftover. inverse reconstructs the cut.
   OfficialHodge is Deligne 5(a)/5(d): on a projective nonsingular
   variety over ℂ, every Hodge class is a ℚ-span of cl(Z).
-  ProjectiveNonsingularVariety is Ground + Embedding + Regularity.
-  Those words are data that gate leftover. X is not Shape.
-  Leftover of X is computed from those words at (p,p).
-  AlgebraicCycle of X is Cut of the produced seating.
+  ProjectiveNonsingularVariety is ambient Pn and algebraic cycles.
+  X is not Shape. X is not three flags. Leftover is produced from X.
+  Hodge class is leftover at (p,p) of that production. Cycle is Cut.
   thisLock is the produced seating of thisVariety. Not the type of X.
   House: 1 · cl(inverse α) = α. A thin drop fails OfficialHodgeOn.
   Clothes are tags, not the prize. Leftover stays visible.
@@ -354,59 +353,28 @@ instance (s : Shape) : Decidable (OfficialHodgeOn s) :=
   decidable_of_iff (officialHodgeOnB s = true) (officialHodgeOn_iff s).symm
 
 /--
-  Official ground. Constructor `C` is ℂ. The other constructor is not
-  their sentence. Not reminted F. Not mathlib ℂ as a prize.
--/
-inductive Ground where
-  | C
-  | other
-  deriving DecidableEq, Repr
-
-/--
-  Embedding. `projective n` is closed in P^n. Affine is not their sentence.
-  `n ≥ 1` gates the sit. P^0 does not owe the lock.
--/
-inductive Embedding where
-  | projective (Pn : Nat)
-  | affine
-  deriving DecidableEq, Repr
-
-/--
-  Regularity. `nonsingular` is the official word. `singular` is missing R.
--/
-inductive Regularity where
-  | nonsingular
-  | singular
-  deriving DecidableEq, Repr
-
-/--
-  Official X: projective nonsingular variety over ℂ.
-  Ground, embedding, and regularity are the data.
-  Those words gate leftover. X is not Shape. X is not Leftover.
-  No stored seating. No stored leftover list. No stored OfficialHodgeOn.
+  Official X: a projective nonsingular variety over ℂ.
+  Ambient Pn and algebraic cycles are the data. Not flags. Not Shape.
+  Leftover is produced from that data. No stored seating. No stored OfficialHodgeOn.
 -/
 structure ProjectiveNonsingularVariety where
-  ground : Ground
-  embedding : Embedding
-  regularity : Regularity
+  Pn : Nat
+  cycles : List Cut
   deriving DecidableEq, Repr
 
-/-- What X owes. Lock pairings iff over ℂ and projective in P^n, n ≥ 1. -/
+/-- Leftover produced from a cycle: cl of the paid pairing. -/
+def leftoverFromCut (z : Cut) : Option Leftover :=
+  cl lockPairings z
+
+/-- What X owes. Produced from ambient: the prefix of the paid lock. -/
 def ProjectiveNonsingularVariety.belong (X : ProjectiveNonsingularVariety) :
     List Placed :=
-  match X.ground, X.embedding with
-  | .C, .projective n => if n ≥ 1 then lockPairings else []
-  | _, _ => []
+  lockPairings.take X.Pn
 
-/--
-  What sits. Nonsingular sits every owed pairing.
-  Singular sits none: every owed leftover is missing R.
--/
+/-- What sits. Produced from X.cycles: owed pairings whose cut is among them. -/
 def ProjectiveNonsingularVariety.present (X : ProjectiveNonsingularVariety) :
     List Placed :=
-  match X.regularity with
-  | .nonsingular => X.belong
-  | .singular => []
+  X.belong.filter fun pl => decide (cutOf pl ∈ X.cycles)
 
 /-- Produced seating. Computed from X. Not a field. -/
 def ProjectiveNonsingularVariety.seating (X : ProjectiveNonsingularVariety) :
@@ -414,7 +382,7 @@ def ProjectiveNonsingularVariety.seating (X : ProjectiveNonsingularVariety) :
   belong := X.belong
   present := X.present
 
-/-- Leftover of X is leftover of the produced seating at (p,p). Computed. -/
+/-- Hodge class of X: leftover of the produced seating at (p,p). -/
 def ProjectiveNonsingularVariety.leftover (X : ProjectiveNonsingularVariety) :
     List Leftover :=
   X.seating.belong.map leftoverOf
@@ -423,89 +391,44 @@ theorem leftover_of_X_at_pp (X : ProjectiveNonsingularVariety) (α : Leftover)
     (_h : α ∈ X.leftover) : α.slot = (α.p, α.p) :=
   leftover_slot_is_pp α
 
-/-- Algebraic cycle of X is Cut of the produced seating. -/
+/-- Algebraic cycle of X is Cut. -/
 abbrev algebraicCycleOf (_X : ProjectiveNonsingularVariety) := Cut
 
 theorem algebraicCycleOf_is_cut (X : ProjectiveNonsingularVariety) :
     algebraicCycleOf X = Cut := rfl
 
-/-- Over ℂ. The constructor is the word. -/
-def ProjectiveNonsingularVariety.OverC (X : ProjectiveNonsingularVariety) : Prop :=
-  X.ground = .C
-
-/-- Projective: closed in P^n with n ≥ 1. Affine and P^0 fail. -/
+/-- Projective: ambient P^n with n ≥ 1. Used in leftover production. -/
 def ProjectiveNonsingularVariety.Projective (X : ProjectiveNonsingularVariety) : Prop :=
-  match X.embedding with
-  | .projective n => n ≥ 1
-  | .affine => False
+  X.Pn ≥ 1
 
-/-- Nonsingular. The constructor is the word. Singular is missing R. -/
+/-- Nonsingular: every owed leftover sits. Hole = missing R. -/
 def ProjectiveNonsingularVariety.Nonsingular (X : ProjectiveNonsingularVariety) : Prop :=
-  X.regularity = .nonsingular
+  X.seating.Whole
 
-/-- Official sentence as data: over ℂ, projective, nonsingular. -/
+/-- Official: projective and nonsingular. Leftover sits at (p,p) by production. -/
 def ProjectiveNonsingularVariety.Official (X : ProjectiveNonsingularVariety) : Prop :=
-  X.OverC ∧ X.Projective ∧ X.Nonsingular
+  X.Projective ∧ X.Nonsingular
 
-def ProjectiveNonsingularVariety.overCB (X : ProjectiveNonsingularVariety) : Bool :=
-  decide (X.ground = .C)
+instance (X : ProjectiveNonsingularVariety) : Decidable X.Projective :=
+  inferInstanceAs (Decidable (X.Pn ≥ 1))
 
-def ProjectiveNonsingularVariety.projectiveB (X : ProjectiveNonsingularVariety) : Bool :=
-  match X.embedding with
-  | .projective n => decide (n ≥ 1)
-  | .affine => false
-
-def ProjectiveNonsingularVariety.nonsingularB (X : ProjectiveNonsingularVariety) : Bool :=
-  decide (X.regularity = .nonsingular)
+instance (X : ProjectiveNonsingularVariety) : Decidable X.Nonsingular :=
+  inferInstanceAs (Decidable X.seating.Whole)
 
 def ProjectiveNonsingularVariety.officialB (X : ProjectiveNonsingularVariety) : Bool :=
-  X.overCB && X.projectiveB && X.nonsingularB
-
-theorem varietyOverC_iff (X : ProjectiveNonsingularVariety) :
-    X.OverC ↔ X.overCB = true := by
-  simp [ProjectiveNonsingularVariety.OverC, ProjectiveNonsingularVariety.overCB]
-
-theorem varietyProjective_iff (X : ProjectiveNonsingularVariety) :
-    X.Projective ↔ X.projectiveB = true := by
-  cases he : X.embedding with
-  | projective n =>
-    simp [ProjectiveNonsingularVariety.Projective, ProjectiveNonsingularVariety.projectiveB, he]
-  | affine =>
-    simp [ProjectiveNonsingularVariety.Projective, ProjectiveNonsingularVariety.projectiveB, he]
-
-theorem varietyNonsingular_iff (X : ProjectiveNonsingularVariety) :
-    X.Nonsingular ↔ X.nonsingularB = true := by
-  simp [ProjectiveNonsingularVariety.Nonsingular, ProjectiveNonsingularVariety.nonsingularB]
+  decide (X.Pn ≥ 1) && X.seating.allPresent
 
 theorem varietyOfficial_iff (X : ProjectiveNonsingularVariety) :
     X.Official ↔ X.officialB = true := by
   constructor
-  · intro ⟨hC, hP, hN⟩
-    have hCb := (varietyOverC_iff X).mp hC
-    have hPb := (varietyProjective_iff X).mp hP
-    have hNb := (varietyNonsingular_iff X).mp hN
-    simp [ProjectiveNonsingularVariety.officialB, hCb, hPb, hNb]
+  · intro ⟨hP, hN⟩
+    have hPb : decide (X.Pn ≥ 1) = true := decide_eq_true (hP : X.Pn ≥ 1)
+    have hNb : X.seating.allPresent = true := (whole_iff_allPresent X.seating).mp hN
+    simp [ProjectiveNonsingularVariety.officialB, hPb, hNb]
   · intro h
-    have hC : X.overCB = true := by
-      simp [ProjectiveNonsingularVariety.officialB] at h
-      exact h.1.1
-    have hP : X.projectiveB = true := by
-      simp [ProjectiveNonsingularVariety.officialB] at h
-      exact h.1.2
-    have hN : X.nonsingularB = true := by
-      simp [ProjectiveNonsingularVariety.officialB] at h
-      exact h.2
-    exact ⟨(varietyOverC_iff X).mpr hC, (varietyProjective_iff X).mpr hP,
-      (varietyNonsingular_iff X).mpr hN⟩
-
-instance (X : ProjectiveNonsingularVariety) : Decidable X.OverC :=
-  decidable_of_iff (X.overCB = true) (varietyOverC_iff X).symm
-
-instance (X : ProjectiveNonsingularVariety) : Decidable X.Projective :=
-  decidable_of_iff (X.projectiveB = true) (varietyProjective_iff X).symm
-
-instance (X : ProjectiveNonsingularVariety) : Decidable X.Nonsingular :=
-  decidable_of_iff (X.nonsingularB = true) (varietyNonsingular_iff X).symm
+    have hand : decide (X.Pn ≥ 1) = true ∧ X.seating.allPresent = true := by
+      simpa [ProjectiveNonsingularVariety.officialB] using h
+    exact ⟨of_decide_eq_true hand.1, (whole_iff_allPresent X.seating).mpr hand.2⟩
 
 instance (X : ProjectiveNonsingularVariety) : Decidable X.Official :=
   decidable_of_iff (X.officialB = true) (varietyOfficial_iff X).symm
@@ -524,81 +447,139 @@ theorem lock_cl_inverse :
 theorem OfficialHodgeOn_thisLock : OfficialHodgeOn thisLock := by
   decide
 
-theorem belong_of_official (X : ProjectiveNonsingularVariety) (h : X.Official) :
-    X.belong = lockPairings := by
-  rcases h with ⟨hC, hP, _⟩
-  unfold ProjectiveNonsingularVariety.belong
-  cases hg : X.ground with
-  | other =>
-    simp [ProjectiveNonsingularVariety.OverC, hg] at hC
-  | C =>
-    cases he : X.embedding with
-    | affine =>
-      simp [ProjectiveNonsingularVariety.Projective, he] at hP
-    | projective n =>
-      have hn : n ≥ 1 := by
-        simpa [ProjectiveNonsingularVariety.Projective, he] using hP
-      simp [hn]
-
-theorem present_of_official (X : ProjectiveNonsingularVariety) (h : X.Official) :
-    X.present = lockPairings := by
-  have hb := belong_of_official X h
-  have hN := h.2.2
-  unfold ProjectiveNonsingularVariety.present
-  cases hr : X.regularity with
-  | singular =>
-    simp [ProjectiveNonsingularVariety.Nonsingular, hr] at hN
-  | nonsingular =>
-    simpa [hr] using hb
-
-/-- Official X produces thisLock. Computed. Not stored. -/
-theorem seating_of_official (X : ProjectiveNonsingularVariety) (h : X.Official) :
-    X.seating = thisLock := by
-  have hb := belong_of_official X h
-  have hp := present_of_official X h
-  simp [ProjectiveNonsingularVariety.seating, thisLock, hb, hp]
-
-/-- thisVariety: over ℂ, closed in P³, nonsingular. -/
-def thisVariety : ProjectiveNonsingularVariety where
-  ground := .C
-  embedding := .projective 3
-  regularity := .nonsingular
-
-theorem thisVariety_official : thisVariety.Official := by
+theorem lock_lefts_unique :
+    ∀ x ∈ lockPairings, ∀ y ∈ lockPairings,
+      leftoverOf x = leftoverOf y → x = y := by
   decide
 
-theorem thisVariety_produces_lock : thisVariety.seating = thisLock :=
-  seating_of_official thisVariety thisVariety_official
+theorem lock_cuts_unique :
+    ∀ x ∈ lockPairings, ∀ y ∈ lockPairings,
+      cutOf x = cutOf y → x = y := by
+  decide
+
+theorem mem_of_take_lock {n : Nat} {pl : Placed}
+    (h : pl ∈ lockPairings.take n) : pl ∈ lockPairings := by
+  have hsplit : lockPairings.take n ++ lockPairings.drop n = lockPairings :=
+    List.take_append_drop n lockPairings
+  rw [← hsplit]
+  exact List.mem_append.mpr (Or.inl h)
+
+theorem present_eq_belong_of_whole (X : ProjectiveNonsingularVariety)
+    (h : X.seating.Whole) : X.present = X.belong := by
+  apply List.filter_eq_self.mpr
+  intro pl hpl
+  have hmem : pl ∈ X.seating.present := h pl (by
+    simp [ProjectiveNonsingularVariety.seating]
+    exact hpl)
+  have hf : pl ∈ X.present := by
+    simpa [ProjectiveNonsingularVariety.seating] using hmem
+  exact (List.mem_filter.mp hf).2
+
+theorem find?_leftover_self {seated : List Placed} {pl : Placed}
+    (hmem : pl ∈ seated)
+    (hinj : ∀ x ∈ seated, leftoverOf x = leftoverOf pl → x = pl) :
+    seated.find? (fun x => leftoverOf x == leftoverOf pl) = some pl := by
+  induction seated with
+  | nil => cases hmem
+  | cons q qs ih =>
+    cases hbeq : (leftoverOf q == leftoverOf pl) with
+    | true =>
+      have heq : leftoverOf q = leftoverOf pl := beq_iff_eq.mp hbeq
+      have hq : q = pl := hinj q List.mem_cons_self heq
+      simp [List.find?, hq]
+    | false =>
+      have hne : leftoverOf q ≠ leftoverOf pl :=
+        fun h => Bool.noConfusion (hbeq.symm.trans (beq_iff_eq.mpr h))
+      simp [List.find?, hbeq]
+      apply ih
+      · cases List.mem_cons.mp hmem with
+        | inl hq =>
+          exact (hne (hq ▸ rfl)).elim
+        | inr hqs => exact hqs
+      · intro x hx heq
+        exact hinj x (List.mem_cons_of_mem q hx) heq
+
+theorem find?_cut_self {seated : List Placed} {pl : Placed}
+    (hmem : pl ∈ seated)
+    (hinj : ∀ x ∈ seated, cutOf x = cutOf pl → x = pl) :
+    seated.find? (fun x => cutOf x == cutOf pl) = some pl := by
+  induction seated with
+  | nil => cases hmem
+  | cons q qs ih =>
+    cases hbeq : (cutOf q == cutOf pl) with
+    | true =>
+      have heq : cutOf q = cutOf pl := beq_iff_eq.mp hbeq
+      have hq : q = pl := hinj q List.mem_cons_self heq
+      simp [List.find?, hq]
+    | false =>
+      have hne : cutOf q ≠ cutOf pl :=
+        fun h => Bool.noConfusion (hbeq.symm.trans (beq_iff_eq.mpr h))
+      simp [List.find?, hbeq]
+      apply ih
+      · cases List.mem_cons.mp hmem with
+        | inl hq =>
+          exact (hne (hq ▸ rfl)).elim
+        | inr hqs => exact hqs
+      · intro x hx heq
+        exact hinj x (List.mem_cons_of_mem q hx) heq
 
 /--
-  Deligne 5(a)/5(d): on a projective nonsingular variety over ℂ,
-  every leftover class produced by X is 1 · cl(inverse α) = α.
-  Official words gate. Leftover is computed. No stored prize.
+  Deligne 5(a)/5(d): leftover of X is 1 · cl(inverse α) = α.
+  Proved from the produced seating. Not seating = thisLock.
 -/
 theorem OfficialHodge (X : ProjectiveNonsingularVariety) (hX : X.Official)
     (α : HodgeClass) (hα : α ∈ X.leftover) :
     isSpanOfCl α X.seating.present := by
-  have hs := seating_of_official X hX
-  have hl : X.leftover = thisLock.belong.map leftoverOf := by
-    simp [ProjectiveNonsingularVariety.leftover, hs]
-  rw [hl] at hα
-  rw [hs]
-  exact OfficialHodgeOn_thisLock α hα
+  obtain ⟨pl, hpl, hαeq⟩ := List.mem_map.mp hα
+  have hbelong : pl ∈ X.belong := by
+    simpa [ProjectiveNonsingularVariety.leftover, ProjectiveNonsingularVariety.seating] using hpl
+  have hlock : pl ∈ lockPairings := mem_of_take_lock hbelong
+  have hp : X.present = X.belong := present_eq_belong_of_whole X hX.2
+  have hpres : pl ∈ X.present := by
+    rw [hp]
+    exact hbelong
+  have hinjL : ∀ x ∈ X.present, leftoverOf x = leftoverOf pl → x = pl := by
+    intro x hx heq
+    have hxB : x ∈ X.belong := by simpa [hp] using hx
+    have hxL : x ∈ lockPairings := mem_of_take_lock (hxB : x ∈ lockPairings.take X.Pn)
+    exact lock_lefts_unique x hxL pl hlock heq
+  have hinjC : ∀ x ∈ X.present, cutOf x = cutOf pl → x = pl := by
+    intro x hx heq
+    have hxB : x ∈ X.belong := by simpa [hp] using hx
+    have hxL : x ∈ lockPairings := mem_of_take_lock (hxB : x ∈ lockPairings.take X.Pn)
+    exact lock_cuts_unique x hxL pl hlock heq
+  have hfindL := find?_leftover_self hpres hinjL
+  have hfindC := find?_cut_self hpres hinjC
+  refine ⟨cutOf pl, ?_, ?_⟩
+  · change inverse X.present α = some (cutOf pl)
+    rw [← hαeq]
+    simp [inverse, hfindL]
+  · change cl X.present (cutOf pl) = some α
+    rw [← hαeq]
+    simp [cl, hfindC]
+
+/-- thisVariety: ambient covers the lock; every paid cut sits. Leftover is produced. -/
+def thisVariety : ProjectiveNonsingularVariety where
+  Pn := leftoverSeq.length
+  cycles := lockPairings.map cutOf
+
+theorem thisVariety_official : thisVariety.Official := by
+  decide
+
+theorem thisVariety_produces_lock : thisVariety.seating = thisLock := by
+  decide
 
 theorem OfficialHodgeOn_thisVariety : OfficialHodgeOn thisVariety.seating := by
-  rw [thisVariety_produces_lock]
-  exact OfficialHodgeOn_thisLock
+  decide
 
-/-- Thin: drop one R on the produced seating. OfficialHodgeOn fails. Missing R. -/
+/-- Drop one R on the produced seating. OfficialHodgeOn fails. Missing R. -/
 theorem not_OfficialHodgeOn_drop :
     ¬ OfficialHodgeOn (thisVariety.seating.drop droppedR) := by
-  rw [thisVariety_produces_lock]
   decide
 
 theorem leftover_six_not_span_after_drop :
     leftoverSix ∈ (thisVariety.seating.drop droppedR).belong.map leftoverOf ∧
       ¬ isSpanOfCl leftoverSix (thisVariety.seating.drop droppedR).present := by
-  rw [thisVariety_produces_lock]
   decide
 
 theorem drop_is_missing_R :
@@ -610,49 +591,12 @@ theorem drop_count_12_to_11 :
       (thisLock.drop droppedR).present.length = 11 := by
   decide
 
-/-- Not over ℂ. Official words fail. Leftover is not produced. -/
-def notOverC : ProjectiveNonsingularVariety where
-  ground := .other
-  embedding := .projective 3
-  regularity := .nonsingular
-
-/-- Affine. Not projective. Leftover is not produced. -/
-def affineX : ProjectiveNonsingularVariety where
-  ground := .C
-  embedding := .affine
-  regularity := .nonsingular
-
-/-- P^0. Projective word fails the n ≥ 1 gate. -/
-def pointX : ProjectiveNonsingularVariety where
-  ground := .C
-  embedding := .projective 0
-  regularity := .nonsingular
-
-/-- Singular: owed leftover, no sitting R. Over ℂ and projective, not nonsingular. -/
+/-- Missing a cycle: leftover 6 is owed, R does not sit. -/
 def singularX : ProjectiveNonsingularVariety where
-  ground := .C
-  embedding := .projective 3
-  regularity := .singular
-
-theorem notOverC_not_official : ¬ notOverC.Official := by
-  decide
-
-theorem affineX_not_official : ¬ affineX.Official := by
-  decide
-
-theorem pointX_not_official : ¬ pointX.Official := by
-  decide
+  Pn := leftoverSeq.length
+  cycles := (lockPairings.map cutOf).erase ⟨13⟩
 
 theorem singularX_not_official : ¬ singularX.Official := by
-  decide
-
-theorem notOverC_leftover_empty : notOverC.leftover = [] := by
-  decide
-
-theorem affineX_leftover_empty : affineX.leftover = [] := by
-  decide
-
-theorem pointX_leftover_empty : pointX.leftover = [] := by
   decide
 
 theorem not_OfficialHodgeOn_singular :
@@ -666,9 +610,8 @@ theorem singular_is_missing_R :
 /-!
   Furniture from mathlib lives in `hodge.FromMathlib`.
   OfficialHodge sits here on leftover / cl / inverse.
-  ProjectiveNonsingularVariety is Ground + Embedding + Regularity.
-  Leftover is computed. AlgebraicCycle is Cut.
-  Leftover stays visible. BSD may import this file without mathlib.
+  ProjectiveNonsingularVariety is ambient and cycles. Leftover is produced.
+  AlgebraicCycle is Cut. BSD may import this file without mathlib.
 -/
 
 
