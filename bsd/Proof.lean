@@ -108,7 +108,9 @@ theorem elliptic_iff (E : EllipticCurve) : E.IsElliptic ↔ ellipticB E = true :
 theorem official_iff (E : EllipticCurve) : E.Official ↔ officialB E = true := by
   constructor
   · intro ⟨hQ, hE⟩
-    simp [officialB, overQ_iff.mp hQ, elliptic_iff.mp hE]
+    have hQb := (overQ_iff E).mp hQ
+    have hEb := (elliptic_iff E).mp hE
+    simp [officialB, hQb, hEb]
   · intro h
     have hQ : overQB E = true := by
       simp [officialB] at h
@@ -116,7 +118,7 @@ theorem official_iff (E : EllipticCurve) : E.Official ↔ officialB E = true := 
     have hE : ellipticB E = true := by
       simp [officialB] at h
       exact h.2
-    exact ⟨overQ_iff.mpr hQ, elliptic_iff.mpr hE⟩
+    exact ⟨(overQ_iff E).mpr hQ, (elliptic_iff E).mpr hE⟩
 
 instance (E : EllipticCurve) : Decidable E.OverQ :=
   decidable_of_iff (overQB E = true) (overQ_iff E).symm
@@ -174,19 +176,32 @@ instance (E : EllipticCurve) (α : Leftover) (z : Cut) :
     Decidable (ClaySentence E α z) :=
   inferInstanceAs (Decidable (ClayOn E.produce α z))
 
+/-- Official words owe the unique paid pairings. Leftover is that list. -/
+theorem curve_belong_of_official (E : EllipticCurve) (h : E.Official) :
+    E.belong = lockPairings := by
+  rcases h with ⟨hQ, hE⟩
+  unfold EllipticCurve.belong
+  cases hg : E.ground with
+  | other =>
+    simp [EllipticCurve.OverQ, hg] at hQ
+  | rat =>
+    cases hk : E.kind with
+    | other =>
+      simp [EllipticCurve.IsElliptic, hk] at hE
+    | elliptic =>
+      rfl
+
+/-- Official words sit every owed pairing. Present is leftover's R. -/
+theorem curve_present_of_official (E : EllipticCurve) (h : E.Official) :
+    E.present = lockPairings :=
+  curve_belong_of_official E h
+
 /-- Official words produce the unique paid seating. Computed. Not stored. -/
 theorem produce_of_official (E : EllipticCurve) (h : E.Official) :
     E.produce = thisLock := by
-  rcases h with ⟨hQ, hE⟩
-  cases E.ground with
-  | other =>
-    simp [EllipticCurve.OverQ] at hQ
-  | rat =>
-    cases E.kind with
-    | other =>
-      simp [EllipticCurve.IsElliptic] at hE
-    | elliptic =>
-      simp [EllipticCurve.produce, EllipticCurve.belong, EllipticCurve.present, thisLock]
+  have hb := curve_belong_of_official E h
+  have hp := curve_present_of_official E h
+  simp [EllipticCurve.produce, thisLock, hb, hp]
 
 /--
   The elliptic curve over Q we sit.
